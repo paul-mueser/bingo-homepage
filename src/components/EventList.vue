@@ -6,12 +6,14 @@
                 <tr>
                 <th>Event Name</th>
                 <th>Happened/Needed</th>
+                <th>Done?</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="event in events" :key="event.id" :class="{ 'not-done': event.amounthappened < event.amountneeded, 'done': !(event.amounthappened < event.amountneeded) }">
+                <tr v-for="event in events" :key="event.id">
                 <td>{{ event.event }}</td>
                 <td>{{ !event.amountbased ? (event.amounthappened < event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
+                <td :class="{ 'not-done': event.amounthappened < event.amountneeded, 'done': !(event.amounthappened < event.amountneeded) }"> </td>
                 </tr>
             </tbody>
         </table>
