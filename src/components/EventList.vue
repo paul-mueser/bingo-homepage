@@ -15,7 +15,7 @@
                 <td>{{ event.event }}</td>
                 <td>{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                 <td :class="event.amounthappened < event.amountneeded ? 'not-done' : 'done'"> </td>
-                <td>
+                <td class="content">
                     <button @click="updateEvent(event.id, true)" :disabled="event.amountbased&&event.amounthappend >= event.amountneeded">Add 1</button>
                     <button @click="updateEvent(event.id, false)" :disabled="event.amounthappend <= 0">Sub 1</button>
                 </td>
@@ -61,6 +61,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .content {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    white-space: nowrap;
+    }
+    
     .not-done {
     background-color: red;
     }
