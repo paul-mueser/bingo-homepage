@@ -11,7 +11,7 @@
             <tbody>
                 <tr v-for="event in events" :key="event.id">
                 <td>{{ event.event }}</td>
-                <td>{{ event.amounthappened }}/{{ event.amountneeded }}</td>
+                <td>{{ event.amountbased ? (event.amounthappened < event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                 </tr>
             </tbody>
         </table>
