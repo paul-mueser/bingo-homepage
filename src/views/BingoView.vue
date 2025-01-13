@@ -32,6 +32,7 @@ export default {
       this.currentComponent = "EventList";
     },
     toggleBingo(event) {
+      this.currentComponent = "EventList";
       const buttonText = event.target.innerText;
       this.user = buttonText;
       this.currentComponent = "BingoBoard";
