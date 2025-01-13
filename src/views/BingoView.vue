@@ -32,10 +32,12 @@ export default {
       this.currentComponent = "EventList";
     },
     toggleBingo(event) {
-      this.currentComponent = "EventList";
+      this.currentComponent = "";
       const buttonText = event.target.innerText;
-      this.user = buttonText;
-      this.currentComponent = "BingoBoard";
+      setTimeout(() => {
+        this.user = buttonText;
+        this.currentComponent = "BingoBoard";
+      }, 50);
     }
   }
 }
