@@ -37,6 +37,7 @@
           for (let i = 0; i < data.length; i++) {
             this.events.push(data[i]);
           }
+          console.log(this.events);
         } catch (err) {
           console.error('Error:', err);
         }
