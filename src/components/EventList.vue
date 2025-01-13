@@ -11,7 +11,7 @@
             </thead>
             <tbody>
                 <tr v-for="event in events" :key="event.id">
-                <td>{{ event.name }}</td>
+                <td>{{ event.event }}</td>
                 <td>{{ event.amounthappened }}</td>
                 <td>{{ event.amountneeded }}</td>
                 </tr>
@@ -34,11 +34,7 @@
       async fetchEvents() {
         try {
           const result = await fetchBingoEvents();
-          const data = result.data;
-          console.log(data);
-          for (let i = 0; i < data.length; i++) {
-            this.events.push(data[i]);
-          }
+          this.events = result.data;
           console.log(this.events);
         } catch (err) {
           console.error('Error:', err);
