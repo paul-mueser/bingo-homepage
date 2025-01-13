@@ -48,7 +48,7 @@
         async updateEvent(id, increase) {
             try {
                 await updateBingoEvent(id, increase);
-                this.fetchEvents();
+                await this.fetchEvents();
             } catch (err) {
                 console.error('Error:', err);
             }
