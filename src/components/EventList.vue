@@ -9,57 +9,65 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="event in events" :key="event.id">
+                <tr v-for="event in events" :key="event.id" :class="{ 'not-done': event.amounthappened < event.amountneeded, 'done': !(event.amounthappened < event.amountneeded) }">
                 <td>{{ event.event }}</td>
-                <td>{{ event.amountbased ? (event.amounthappened < event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
+                <td>{{ !event.amountbased ? (event.amounthappened < event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-  </template>
-  
-  <script>
-  import { fetchBingoEvents } from '../services/bingoService.js';
-  
-  export default {
+</template>
+
+<script>
+    import { fetchBingoEvents } from '../services/bingoService.js';
+
+    export default {
     name: 'EventList',
     data() {
-      return {
+        return {
         events: []
-      }
+        }
     },
     methods: {
-      async fetchEvents() {
+        async fetchEvents() {
         try {
-          const result = await fetchBingoEvents();
-          this.events = result.data;
-          console.log(this.events);
+            const result = await fetchBingoEvents();
+            this.events = result.data;
+            console.log(this.events);
         } catch (err) {
-          console.error('Error:', err);
+            console.error('Error:', err);
         }
-      },
+        },
     },
     mounted() {
         this.fetchEvents();
     }
-  }
-  </script>
-  
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
-  <style scoped>
-  h3 {
+    }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+    h3 {
     margin: 40px 0 0;
-  }
-  ul {
+    }
+    ul {
     list-style-type: none;
     padding: 0;
-  }
-  li {
+    }
+    li {
     display: inline-block;
     margin: 0 10px;
-  }
-  a {
+    }
+    a {
     color: #42b983;
-  }
-  </style>
+    }
+
+    .not-done {
+    background-color: red;
+    }
+
+    .done {
+        background-color: green;
+    }
+</style>
   
