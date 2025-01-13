@@ -5,15 +5,13 @@
             <thead>
                 <tr>
                 <th>Event Name</th>
-                <th>Happened</th>
-                <th>Needed</th>
+                <th>Happened/Needed</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="event in events" :key="event.id">
                 <td>{{ event.event }}</td>
-                <td>{{ event.amounthappened }}</td>
-                <td>{{ event.amountneeded }}</td>
+                <td>{{ event.amounthappened }}/{{ event.amountneeded }}</td>
                 </tr>
             </tbody>
         </table>
