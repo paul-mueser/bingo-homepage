@@ -1,0 +1,62 @@
+name: Deployment
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11.1'
+      
+      - name: setup backend-files
+        run: |
+          chmod +x ./setup-backend-files.sh
+          ./setup-backend-files.sh
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+
+      - name: copy backend-files to server
+        uses: appleboy/scp-action@917f8b81dfc1ccd331fef9e2d61bdc6c8be94634
+        with:
+          HOST: ${{ secrets.HOST }}
+          PORT: ${{ secrets.PORT }}
+          USERNAME: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          target: ${{ secrets.TARGET }}
+          source: "./api/*"
+          strip_components: 0
+
+      - name: Install dependencies and build
+        run: |
+          sed -i "s|{{API_URL}}|${{ secrets.API_URL }}|g" src/services/authService.js
+          npm install
+          npm run build
+
+      - name: copy frontend-files to server
+        uses: appleboy/scp-action@917f8b81dfc1ccd331fef9e2d61bdc6c8be94634
+        with:
+          HOST: ${{ secrets.HOST }}
+          PORT: ${{ secrets.PORT }}
+          USERNAME: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          target: ${{ secrets.TARGET }}
+          source: "./dist/*"
+          strip_components: 1
