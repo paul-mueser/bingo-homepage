@@ -17,7 +17,7 @@
                 <td :class="event.amounthappened < event.amountneeded ? 'not-done' : 'done'"> </td>
                 <td>
                     <button @click="updateEvent(event.id, true)" :disabled="event.amountbased&&event.amounthappend >= event.amountneeded">Add 1</button>
-                    <button @click="updateEvent(event.id, false)" :disabled="event.amounthappend == 0">Sub 1</button>
+                    <button @click="updateEvent(event.id, false)" :disabled="event.amounthappend <= 0">Sub 1</button>
                 </td>
                 </tr>
             </tbody>
@@ -48,7 +48,7 @@
         async updateEvent(id, increase) {
             try {
                 await updateBingoEvent(id, increase);
-                await this.fetchEvents();
+                this.fetchEvents();
             } catch (err) {
                 console.error('Error:', err);
             }
