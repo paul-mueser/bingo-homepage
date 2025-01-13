@@ -29,33 +29,33 @@
     import { fetchBingoEvents, updateBingoEvent } from '../services/bingoService.js';
 
     export default {
-    name: 'EventList',
-    data() {
-        return {
-        events: []
-        }
-    },
-    methods: {
-        async fetchEvents() {
-        try {
-            const result = await fetchBingoEvents();
-            this.events = result.data;
-        } catch (err) {
-            console.error('Error:', err);
-        }
+        name: 'EventList',
+        data() {
+            return {
+            events: []
+            }
         },
-        async updateEvent(id, increase) {
+        methods: {
+            async fetchEvents() {
             try {
-                await updateBingoEvent(id, increase);
-                this.fetchEvents();
+                const result = await fetchBingoEvents();
+                this.events = result.data;
             } catch (err) {
                 console.error('Error:', err);
             }
+            },
+            async updateEvent(id, increase) {
+                try {
+                    await updateBingoEvent(id, increase);
+                    this.fetchEvents();
+                } catch (err) {
+                    console.error('Error:', err);
+                }
+            }
+        },
+        mounted() {
+            this.fetchEvents();
         }
-    },
-    mounted() {
-        this.fetchEvents();
-    }
     }
 </script>
 
