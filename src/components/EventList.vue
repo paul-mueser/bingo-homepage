@@ -7,6 +7,7 @@
                 <th>Event Name</th>
                 <th>Happened/Needed</th>
                 <th>Done?</th>
+                <th>Update</th>
                 </tr>
             </thead>
             <tbody>
@@ -14,6 +15,10 @@
                 <td>{{ event.event }}</td>
                 <td>{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                 <td :class="event.amounthappened < event.amountneeded ? 'not-done' : 'done'"> </td>
+                <td>
+                    <button @click="updateEvent(event.id, true)">Add 1</button>
+                    <button @click="updateEvent(event.id, false)">Sub 1</button>
+                </td>
                 </tr>
             </tbody>
         </table>
@@ -21,7 +26,7 @@
 </template>
 
 <script>
-    import { fetchBingoEvents } from '../services/bingoService.js';
+    import { fetchBingoEvents, updateBingoEvent } from '../services/bingoService.js';
 
     export default {
     name: 'EventList',
@@ -40,6 +45,14 @@
             console.error('Error:', err);
         }
         },
+        async updateEvent(id, increase) {
+            try {
+                await updateBingoEvent(id, increase);
+                this.fetchEvents();
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
     },
     mounted() {
         this.fetchEvents();
