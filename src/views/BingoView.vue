@@ -1,10 +1,10 @@
 <template>
   <div>
-    <button @click="toggleEventList" :disabled="currentComponent!=='EventList'">Events</button>
-    <button @click="toggleBingo" :disabled="currentComponent!=='BingoBoard'">Julia</button>
-    <button @click="toggleBingo" :disabled="currentComponent!=='BingoBoard'">Pia</button>
-    <button @click="toggleBingo" :disabled="currentComponent!=='BingoBoard'">Moritz</button>
-    <button @click="toggleBingo" :disabled="currentComponent!=='BingoBoard'">Paul</button>
+    <button @click="toggleEventList" :disabled="currentComponent==='EventList'">Events</button>
+    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'">Julia</button>
+    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'">Pia</button>
+    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'">Moritz</button>
+    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'">Paul</button>
     <EventList v-if="currentComponent==='EventList'"/>
     <BingoBoard v-if="currentComponent==='BingoBoard'" :user="user"/>
   </div>
