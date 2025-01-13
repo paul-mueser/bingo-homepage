@@ -5,11 +5,10 @@ import Register from '../components/Register.vue';
 import Profile from '../components/HelloWorld.vue'; // Change this to your profile component
 
 const routes = [
-  { path: '/', redirect: '/login' },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   {
-      path: '/profile',
+      path: '/',
       component: Profile,
       beforeEnter: async (to, from, next) => {
         try {
