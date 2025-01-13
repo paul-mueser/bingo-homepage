@@ -1,0 +1,45 @@
+<template>
+    <div>
+      <h1>Events</h1>
+      <p>Lorem ipsum</p>
+    </div>
+  </template>
+  
+  <script>
+  import { fetchBingoEvents } from '../services/bingoService';
+  
+  export default {
+    name: 'EventList',
+    methods: {
+      async fetchEvents() {
+        try {
+          await fetchBingoEvents();
+        } catch (err) {
+          console.error('Error:', err);
+        }
+      },
+    },
+    mounted() {
+        this.fetchEvents();
+    }
+  }
+  </script>
+  
+  <!-- Add "scoped" attribute to limit CSS to this component only -->
+  <style scoped>
+  h3 {
+    margin: 40px 0 0;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+  a {
+    color: #42b983;
+  }
+  </style>
+  

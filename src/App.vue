@@ -1,11 +1,32 @@
 <template>
-  <nav>
-    <router-link to="/login">Login</router-link>
-    <a> | </a>
-    <router-link to="/register">Register</router-link>
-  </nav>
+  <header>
+    <nav>
+      <router-link to="/login">Login</router-link>
+      <a> | </a>
+      <router-link to="/register">Register</router-link>
+      <a> | </a>
+      <a @click="logout">Logout</a>
+    </nav>
+  </header>
   <router-view/>
 </template>
+
+<script>
+import { logout } from '../services/authService.js';
+
+export default {
+  methods: {
+    async logout() {
+      try {
+        await logout();
+        this.$router.push('/login');
+      } catch (error) {
+        console.error('Logout failed', error);
+      }
+    }
+  }
+};
+</script>
 
 <style>
 #app {
@@ -29,29 +50,3 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
-
-<!-- Something like this for logout
-<template>
-  <div>
-    <h1>Profile</h1>
-    <button @click="logout">Logout</button>
-  </div>
-</template>
-
-<script>
-import { logout } from '../services/authService.js';
-
-export default {
-  methods: {
-    async logout() {
-      try {
-        await logout();
-        this.$router.push('/login');
-      } catch (error) {
-        console.error('Logout failed', error);
-      }
-    }
-  }
-};
-</script>
--->

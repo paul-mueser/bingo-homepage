@@ -2,14 +2,14 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { verifyToken, refreshToken } from '../services/authService.js';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
-import Profile from '../components/HelloWorld.vue';
+import BingoView from '../views/BingoView.vue';
 
 const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   {
       path: '/',
-      component: Profile,
+      component: BingoView,
       beforeEnter: async (to, from, next) => {
         try {
           await verifyToken();
