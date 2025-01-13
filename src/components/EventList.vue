@@ -1,7 +1,22 @@
 <template>
     <div>
-      <h1>Events</h1>
-      <p>Lorem ipsum</p>
+        <h1>Events</h1>
+        <table>
+            <thead>
+                <tr>
+                <th>Event Name</th>
+                <th>Happened</th>
+                <th>Needed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="event in events" :key="event.id">
+                <td>{{ event.name }}</td>
+                <td>{{ event.amounthappened }}</td>
+                <td>{{ event.amountneeded }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
   </template>
   
@@ -10,10 +25,16 @@
   
   export default {
     name: 'EventList',
+    data() {
+      return {
+        events: []
+      }
+    },
     methods: {
       async fetchEvents() {
         try {
-          await fetchBingoEvents();
+          const data = await fetchBingoEvents();
+          this.events = data;
         } catch (err) {
           console.error('Error:', err);
         }
