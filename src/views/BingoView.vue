@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <button @click="toggleEventList" :disabled="currentComponent==='EventList'">Events</button>
     <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Julia'">Julia</button>
     <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Pia'">Pia</button>

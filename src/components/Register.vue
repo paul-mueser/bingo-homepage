@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
       <h2>Register</h2>
       <form @submit.prevent="handleRegister">
         <div>
