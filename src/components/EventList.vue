@@ -40,7 +40,6 @@
         try {
             const result = await fetchBingoEvents();
             this.events = result.data;
-            console.log(this.events);
         } catch (err) {
             console.error('Error:', err);
         }

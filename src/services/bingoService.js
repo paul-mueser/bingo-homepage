@@ -9,7 +9,6 @@ export const fetchBingoEvents = async () => {
 
 export const fetchBingoBoard = async (boardname) => {
     const result = await axios.post(`${API_URL}/api/fetch-bingo-board`, { boardname });
-    console.log(result);
     return result.data;
 }
 
