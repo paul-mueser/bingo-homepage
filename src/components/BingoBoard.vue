@@ -16,7 +16,9 @@
     methods: {
       async fetchBoard() {
         try {
-          await fetchBingoBoard(this.user);
+          const result = await fetchBingoBoard(this.user);
+					const data = result.data;
+					console.log(data);
         } catch (err) {
           console.error('Error:', err);
         }
