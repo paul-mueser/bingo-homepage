@@ -34,7 +34,9 @@
       async fetchEvents() {
         try {
           const data = await fetchBingoEvents();
-          this.events = data;
+          for (let i = 0; i < data.length; i++) {
+            this.events.push(data[i]);
+          }
         } catch (err) {
           console.error('Error:', err);
         }
