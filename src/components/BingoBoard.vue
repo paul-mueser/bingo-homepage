@@ -34,9 +34,9 @@
 					const result = await fetchBingoBoard(this.user);
 					const data = result.data;
 					for (let i = 0; i < 5; i++) {
-						events.push(data.slice(i * 5, i * 5 + 5));
+						this.events.push(data.slice(i * 5, i * 5 + 5));
 					}
-					console.log(events);
+					console.log(this.events);
 				} catch (err) {
 					console.error('Error:', err);
 				}
