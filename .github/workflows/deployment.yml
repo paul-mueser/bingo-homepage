@@ -48,6 +48,7 @@ jobs:
       - name: Install dependencies and build
         run: |
           sed -i "s|{{API_URL}}|${{ secrets.API_URL }}|g" src/services/authService.js
+          sed -i "s|{{API_URL}}|${{ secrets.API_URL }}|g" src/services/bingoService.js
           npm install
           npm run build
 
