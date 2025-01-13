@@ -67,6 +67,7 @@
 
 	.not-done {
 	background-color: red;
+	color: white;
 	}
 
 	.done {
