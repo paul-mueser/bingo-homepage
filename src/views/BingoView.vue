@@ -7,7 +7,7 @@
       <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Moritz'">Moritz</button>
       <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Paul'">Paul</button>
     </div>
-    <div>
+    <div class="content">
       <EventList v-if="currentComponent==='EventList'"/>
       <BingoBoard v-if="currentComponent==='BingoBoard'" :user="user"/>
     </div>
