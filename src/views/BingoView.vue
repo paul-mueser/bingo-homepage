@@ -1,12 +1,16 @@
 <template>
   <div class="container">
-    <button @click="toggleEventList" :disabled="currentComponent==='EventList'">Events</button>
-    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Julia'">Julia</button>
-    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Pia'">Pia</button>
-    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Moritz'">Moritz</button>
-    <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Paul'">Paul</button>
-    <EventList v-if="currentComponent==='EventList'"/>
-    <BingoBoard v-if="currentComponent==='BingoBoard'" :user="user"/>
+    <div class="content">
+      <button @click="toggleEventList" :disabled="currentComponent==='EventList'">Events</button>
+      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Julia'">Julia</button>
+      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Pia'">Pia</button>
+      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Moritz'">Moritz</button>
+      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Paul'">Paul</button>
+    </div>
+    <div class="content">
+      <EventList v-if="currentComponent==='EventList'"/>
+      <BingoBoard v-if="currentComponent==='BingoBoard'" :user="user"/>
+    </div>
   </div>
 </template>
 
@@ -42,3 +46,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.content {
+  margin-left: -10px;
+  margin-right: -10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+</style>
