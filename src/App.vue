@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { logout } from '../services/authService.js';
+import { logout } from './services/authService.js';
 
 export default {
   methods: {

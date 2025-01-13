@@ -8,7 +8,6 @@
 <script>
 // @ is an alias to /src
 import EventList from '@/components/EventList.vue';
-import EventList from '@/components/EventList.vue'
 
 export default {
   name: 'BingoView',
@@ -23,9 +22,6 @@ export default {
   methods: {
     toggleEventList() {
       this.showEventList = !this.showEventList;
-      if (this.showEventList) {
-        EventList.$forceUpdate();
-      }
     }
   }
 }

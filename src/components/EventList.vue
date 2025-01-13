@@ -6,7 +6,7 @@
   </template>
   
   <script>
-  import { fetchBingoEvents } from '../services/bingoService';
+  import { fetchBingoEvents } from '../services/bingoService.js';
   
   export default {
     name: 'EventList',
