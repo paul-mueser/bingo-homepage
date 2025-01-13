@@ -33,7 +33,8 @@
     methods: {
       async fetchEvents() {
         try {
-          const data = await fetchBingoEvents();
+          const result = await fetchBingoEvents();
+          const data = result.data;
           console.log(data);
           for (let i = 0; i < data.length; i++) {
             this.events.push(data[i]);
