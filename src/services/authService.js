@@ -11,7 +11,7 @@ export const login = async (username, password) => {
 };
 
 export const getProfile = async () => {
-    return axios.get(`${API_URL}/#/`, {
+    return axios.get(`${API_URL}/`, {
         withCredentials: true
     });
 };
