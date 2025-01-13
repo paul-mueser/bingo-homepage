@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { verifyToken, refreshToken } from '../services/authService.js';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
-import Profile from '../components/HelloWorld.vue'; // Change this to your profile component
+import Profile from '../components/HelloWorld.vue';
 
 const routes = [
   { path: '/login', component: Login },

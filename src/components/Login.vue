@@ -27,7 +27,7 @@
       async handleLogin() {
         try {
           await login(this.username, this.password);
-          this.$router.push('/profile'); // Navigate to profile page
+          this.$router.push('/profile');
         } catch (err) {
           console.error('Login failed:', err);
         }

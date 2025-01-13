@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API_URL = '{{API_URL}}';
 
-export const register = async (username, password) => {
-    return axios.post(`${API_URL}/api/register`, { username, password });
+export const register = async (username, password, authCode) => {
+    return axios.post(`${API_URL}/api/register`, { username, password, authCode });
 };
 
 export const login = async (username, password) => {

@@ -11,6 +11,9 @@
         <div>
           <input v-model="confirmPassword" type="password" placeholder="Confirm Password" required />
         </div>
+        <div>
+          <input v-model="authCode" type="text" placeholder="Authentication Code" required />
+        </div>
         <button type="submit">Register</button>
       </form>
     </div>
@@ -25,6 +28,7 @@
         username: '',
         password: '',
         confirmPassword: '',
+        authCode: '',
       };
     },
     methods: {
@@ -34,8 +38,8 @@
           return;
         }
         try {
-          await register(this.username, this.password);
-          this.$router.push('/login'); // Navigate to login page
+          await register(this.username, this.password, this.authCode);
+          this.$router.push('/login');
         } catch (err) {
           console.error('Registration failed:', err);
         }

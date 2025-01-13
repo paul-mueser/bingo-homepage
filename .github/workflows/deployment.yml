@@ -30,6 +30,7 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_NAME: ${{ secrets.DB_NAME }}
+          CORRECT_AUTH_CODE: ${{ secrets.CORRECT_AUTH_CODE }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SITE_URL: ${{ secrets.SITE_URL }}
 
