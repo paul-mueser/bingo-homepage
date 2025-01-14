@@ -41,6 +41,9 @@
           console.error('Logout failed', error);
       }
       }
+  },
+  mounted() {
+    this.checkAuth();
   }
   };
 </script>
