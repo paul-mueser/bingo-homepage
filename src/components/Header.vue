@@ -3,13 +3,11 @@
         <nav>
             <div class="container">
                 <div class="content" style="font-size: 2rem;">
-                    <router-link to="/" class="highlight">Home</router-link>
+                    <router-link v-if="isAuthenticated" to="/" class="highlight">Home</router-link>
+                    <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
                     <a> | </a>
-                    <router-link to="/login">Login</router-link>
-                    <a> | </a>
-                    <router-link to="/register">Register</router-link>
-                    <a> | </a>
-                    <router-link to="/" @click="logout">Logout</router-link>
+                    <router-link v-if="!isAuthenticated" to="/register">Register</router-link>
+                    <router-link v-if="isAuthenticated" to="/login" @click="logout">Logout</router-link>
                 </div>
             </div>
         </nav>
@@ -21,7 +19,20 @@
   import { logout } from '../services/authService.js';
 
   export default {
+  data() {
+    return {
+      isAuthenticated: false
+    };
+  },
   methods: {
+      async checkAuth() {
+        try {
+          await verifyToken();
+          this.isAuthenticated = true;
+        } catch (error) {
+          this.isAuthenticated = false;
+        }
+      },
       async logout() {
       try {
           await logout();
