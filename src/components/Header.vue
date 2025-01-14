@@ -3,6 +3,8 @@
         <nav>
             <div class="container">
                 <div class="content" style="font-size: 2rem;">
+                    <router-link to="/" class="highlight">Home</router-link>
+                    <a> | </a>
                     <router-link to="/login">Login</router-link>
                     <a> | </a>
                     <router-link to="/register">Register</router-link>
@@ -15,20 +17,21 @@
 </template>
 
 <script>
-    import { logout } from '../services/authService.js';
+  import router from '@/router/index.js';
+  import { logout } from '../services/authService.js';
 
-    export default {
-    methods: {
-        async logout() {
-        try {
-            await logout();
-            //this.$router.push('/login');
-        } catch (error) {
-            console.error('Logout failed', error);
-        }
-        }
-    }
-    };
+  export default {
+  methods: {
+      async logout() {
+      try {
+          await logout();
+          //this.$router.push('/login');
+      } catch (error) {
+          console.error('Logout failed', error);
+      }
+      }
+  }
+  };
 </script>
 
 <style scoped>
