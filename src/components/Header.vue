@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import router from '@/router/index.js';
+  import { verifyToken } from '../services/authService.js';
   import { logout } from '../services/authService.js';
 
   export default {
