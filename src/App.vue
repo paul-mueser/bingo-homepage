@@ -33,7 +33,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      this.headerHeight();
+      this.refreshHeader();
     }
   }
 };
