@@ -1,8 +1,8 @@
 <template>
-  <Header ref="header"></Header>
+  <Header :key="headerKey" ref="header"></Header>
   <div class="background">
     <div ref="body">
-      <router-view/>
+      <router-view onload="refreshHeader"/>
     </div>
   </div>
 </template>
@@ -14,10 +14,18 @@ export default {
   components: {
     Header
   },
+  data() {
+    return {
+      headerKey: 0
+    };
+  },
   methods: {
     headerHeight() {
       let header = this.$refs.header.$el.clientHeight;
       this.$refs.body.style.marginTop = (header + 16) + "px";
+    },
+    refreshHeader() {
+      this.headerKey++;
     }
   },
   mounted() {
