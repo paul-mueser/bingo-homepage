@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch user from database
-$stmt = $conn->prepare("SELECT * FROM bingoevent");
+$stmt = $conn->prepare("SELECT * FROM bingoevent ORDER BY event");
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all(MYSQLI_ASSOC);

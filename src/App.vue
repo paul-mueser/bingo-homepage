@@ -30,17 +30,11 @@ export default {
   },
   mounted() {
     this.headerHeight();
-    /*
-    document.addEventListener('DOMContentLoaded', function() {
-      var scrollpos = sessionStorage.getItem('scrollpos');
-      if (scrollpos) window.scrollTo(0, scrollpos);
-      sessionStorage.removeItem('scrollpos');
-    });
-
-    window.onbeforeunload = function(e) {
-      sessionStorage.setItem('scrollpos', window.scrollY);
-    };
-    */
+  },
+  watch: {
+    $route(to, from) {
+      this.headerHeight();
+    }
   }
 };
 </script>
