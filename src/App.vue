@@ -2,7 +2,7 @@
   <Header :key="headerKey" ref="header"></Header>
   <div class="background">
     <div ref="body">
-      <router-view onload="refreshHeader"/>
+      <router-view @route-change="refreshHeader"/>
     </div>
   </div>
 </template>
