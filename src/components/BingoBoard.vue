@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-      	<h1>{{ user }}</h1>
-		  <table>
+      	<h1>{{ user }} ({{ points }} Punkte)</h1>
+		<table>
             <tbody>
                 <tr v-for="event in events" :key="event.id">
                 <td :class="event[0].amounthappened < event[0].amountneeded ? 'not-done' : 'done'">{{ event[0].event }}</td>
@@ -25,7 +25,8 @@
 		},
 		data() {
 			return {
-			events: []
+				events: [],
+				points: 0
 			}
 		},
 		methods: {
@@ -40,6 +41,48 @@
 				} catch (err) {
 					console.error('Error:', err);
 				}
+
+				let bingoCount = 0;
+
+				function isBingo(line) {
+					return line.every(event => event.amounthappened >= event.amountneeded);
+				}
+
+				for (let i = 0; i < 5; i++) {
+					if (isBingo(this.events[i])) {
+						bingoCount++;
+					}
+
+					let column = [];
+
+					for (let j = 0; j < 5; j++) {
+						if (this.events[i][j].amounthappened >= this.events[i][j].amountneeded) {
+							this.points += this.events[i][j].points;
+						}
+						column.push(this.events[j][i]);
+					}
+
+					if (isBingo(column)) {
+						bingoCount++;
+					}
+				}
+
+				let diagonal1 = [];
+				let diagonal2 = [];
+				for (let i = 0; i < 5; i++) {
+					diagonal1.push(this.events[i][i]);
+					diagonal2.push(this.events[i][4 - i]);
+				}
+
+				if (isBingo(diagonal1)) {
+					bingoCount++;
+				}
+
+				if (isBingo(diagonal2)) {
+					bingoCount++;
+				}
+
+				this.points += bingoCount * 20; //TODO update points for bingo
 			},
 		},
 		mounted() {
