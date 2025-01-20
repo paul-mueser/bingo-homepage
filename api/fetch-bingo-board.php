@@ -27,7 +27,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $boardname = $data['boardname'];
 
 // Fetch user from database
-$stmt = $conn->prepare("SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid, bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id WHERE name = ? ORDER BY bingoboards.y_col, bingoboards.x_row");
+$stmt = $conn->prepare('SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid, bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased, bingocategory.name AS "catagory", bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE bingoboards.name = ? ORDER BY bingoboards.y_col, bingoboards.x_row');
 $stmt->bind_param("s", $boardname);
 $stmt->execute();
 $result = $stmt->get_result();
