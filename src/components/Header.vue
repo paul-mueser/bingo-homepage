@@ -3,7 +3,7 @@
         <nav>
             <div class="container">
                 <div class="content" style="font-size: 2rem;">
-                    <router-link v-if="isAuthenticated" to="/" class="highlight">Home</router-link>
+                    <router-link v-if="isAuthenticated" to="/">Home</router-link>
                     <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
                     <a> | </a>
                     <router-link v-if="!isAuthenticated" to="/register">Register</router-link>
