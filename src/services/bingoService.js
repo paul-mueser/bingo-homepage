@@ -13,5 +13,5 @@ export const fetchBingoBoard = async (boardname) => {
 }
 
 export const updateBingoEvent = async (eventid, increase) => {
-    return await axios.post(`${API_URL}/api/update-bingo-event`, { eventid, increase });
+    return await axios.post(`${API_URL}/api/update-bingo-event`, { eventid, increase }, { withCredentials: true });
 }

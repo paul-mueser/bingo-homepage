@@ -32,3 +32,4 @@ sed -i "s|{{DB_HOST}}|${DB_HOST}|g" api/update-bingo-event.php
 sed -i "s|{{DB_USER}}|${DB_USER}|g" api/update-bingo-event.php
 sed -i "s|{{DB_PASS}}|${DB_PASSWORD}|g" api/update-bingo-event.php
 sed -i "s|{{DB_NAME}}|${DB_NAME}|g" api/update-bingo-event.php
+sed -i "s|{{JWT_SECRET}}|${JWT_SECRET}|g" api/update-bingo-event.php
