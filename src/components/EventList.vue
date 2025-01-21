@@ -16,7 +16,7 @@
                 <td>{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                 <td :class="event.amounthappened < event.amountneeded ? 'not-done' : 'done'"> </td>
                 <td class="content">
-                    <button @click="updateEvent(event.id, true)" :disabled="event.amountbased&&event.amounthappend >= event.amountneeded">Add 1</button>
+                    <button @click="updateEvent(event.id, true)" :disabled="console.log(event.amountbased && event.amounthappend >= event.amountneeded) || event.amountbased && event.amounthappend >= event.amountneeded">Add 1</button>
                     <button @click="updateEvent(event.id, false)" :disabled="event.amounthappend <= 0">Sub 1</button>
                 </td>
                 </tr>
