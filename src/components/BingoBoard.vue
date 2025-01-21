@@ -82,7 +82,7 @@
 					bingoCount++;
 				}
 
-				this.points += bingoCount * 20; //TODO update points for bingo
+				this.points += bingoCount * 100;
 			},
 		},
 		mounted() {
