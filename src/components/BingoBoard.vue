@@ -4,11 +4,11 @@
 		<table>
             <tbody>
                 <tr v-for="event in events" :key="event.id">
-                <td :class="event[0].amounthappened < event[0].amountneeded ? 'not-done' : 'done'">{{ event[0].event }}</td>
-                <td :class="event[1].amounthappened < event[1].amountneeded ? 'not-done' : 'done'">{{ event[1].event }}</td>
-                <td :class="event[2].amounthappened < event[2].amountneeded ? 'not-done' : 'done'">{{ event[2].event }}</td>
-                <td :class="event[3].amounthappened < event[3].amountneeded ? 'not-done' : 'done'">{{ event[3].event }}</td>
-                <td :class="event[4].amounthappened < event[4].amountneeded ? 'not-done' : 'done'">{{ event[4].event }}</td>
+                <td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[0].event }}</td>
+                <td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[1].event }}</td>
+                <td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[2].event }}</td>
+                <td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[3].event }}</td>
+                <td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[4].event }}</td>
                 </tr>
             </tbody>
         </table>
@@ -100,5 +100,9 @@
 	.done {
 		background-color: green;
 	}
+
+	.impossible {
+        background-color: black;
+    }
 </style>
   

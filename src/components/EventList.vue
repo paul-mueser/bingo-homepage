@@ -14,10 +14,10 @@
                 <tr v-for="event in events" :key="event.id">
                 <td>{{ event.event }}</td>
                 <td>{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
-                <td :class="event.amounthappened < event.amountneeded ? 'not-done' : 'done'"> </td>
+                <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
                 <td class="content">
                     <button @click="updateEvent(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">Add 1</button>
-                    <button @click="updateEvent(event.id, false)" :disabled="event.amounthappened <= 0">Sub 1</button>
+                    <button @click="updateEvent(event.id, false)" :disabled="event.amounthappened <= -1">Sub 1</button>
                 </td>
                 </tr>
             </tbody>
@@ -76,6 +76,10 @@
 
     .done {
         background-color: green;
+    }
+
+    .impossible {
+        background-color: black;
     }
 </style>
   
