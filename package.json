@@ -15,7 +15,7 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0",
     "node-sass": "^9.0.0",
-    "sass-loader": "^16.0.4",
+    "sass-loader": "^16.0.5",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
