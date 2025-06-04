@@ -86,7 +86,7 @@
 			},
 		},
 		mounted() {
-			await this.fetchBoard();
+			this.fetchBoard();
 		}
 	}
 </script>
