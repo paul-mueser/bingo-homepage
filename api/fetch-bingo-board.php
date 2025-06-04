@@ -1,5 +1,28 @@
 <?php
 header("Content-Type: application/json");
+
+require './vendor/autoload.php';
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
+
+$secret_key = "{{JWT_SECRET}}";
+
+if (!isset($_COOKIE['token'])) {
+    http_response_code(401);
+    echo json_encode(["error" => "No token provided"]);
+    exit();
+}
+
+$jwt = $_COOKIE['token'];
+
+try {
+    $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
+} catch (Exception $e) {
+    http_response_code(401);
+    echo json_encode(["error" => "Invalid token"]);
+    exit();
+}
+
 // Table in this way (maybe x,y as point) (look if the text fits in the table)
 //create table matrices_2d (
 //    name varchar(20),
