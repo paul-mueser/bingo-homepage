@@ -54,7 +54,7 @@
             }
         },
         mounted() {
-            this.fetchEvents();
+            await this.fetchEvents();
         }
     }
 </script>
