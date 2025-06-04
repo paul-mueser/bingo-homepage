@@ -38,7 +38,7 @@
           await logout();
           //this.$router.push('/login');
       } catch (error) {
-          console.error('Logout failed', error);
+          console.error('Logout failed');
       }
       }
   },

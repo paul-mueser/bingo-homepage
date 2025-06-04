@@ -41,7 +41,6 @@
                 const result = await fetchBingoEvents();
                 this.events = result.data;
             } catch (err) {
-                console.error('Error:', err);
             }
             },
             async updateEvent(id, increase) {
@@ -49,7 +48,6 @@
                     await updateBingoEvent(id, increase);
                     this.fetchEvents();
                 } catch (err) {
-                    console.error('Error:', err);
                 }
             }
         },

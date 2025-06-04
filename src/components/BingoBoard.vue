@@ -37,9 +37,7 @@
 					for (let i = 0; i < 5; i++) {
 						this.events.push(data.slice(i * 5, i * 5 + 5));
 					}
-					console.log(this.events);
 				} catch (err) {
-					console.error('Error:', err);
 				}
 
 				let bingoCount = 0;

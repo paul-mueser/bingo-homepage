@@ -41,7 +41,7 @@
           await register(this.username, this.password, this.authCode);
           this.$router.push('/login');
         } catch (err) {
-          console.error('Registration failed:', err);
+          console.error('Registration failed');
         }
       },
     },
