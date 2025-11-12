@@ -95,5 +95,6 @@ export default {
   .game {
     outline-style: solid;
     outline-color: var(--text-color-highlight);
+    outline-offset: 4px;
   }
 </style>
