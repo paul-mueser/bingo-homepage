@@ -3,8 +3,8 @@
       	<h1>{{ user }}</h1>
 		<h1>Running Games</h1>
 		<div v-for="game in runningGames" :key="game.gameid" class="game">
-			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames[game.gameid] ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
-			<div v-show="!collapsedGames[game.gameid]">
+			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
+			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
 						<tr v-for="event in events.get(game.gameid)" :key="event.id">
@@ -20,8 +20,8 @@
 		</div>
 		<h1>Upcomming Games</h1>
 		<div v-for="game in upcomingGames" :key="game.gameid" class="game">
-			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames[game.gameid] ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
-			<div v-show="!collapsedGames[game.gameid]">
+			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
+			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
 						<tr v-for="event in events.get(game.gameid)" :key="event.id">
@@ -37,8 +37,8 @@
 		</div>
 		<h1>Finished Games</h1>
 		<div v-for="game in finishedGames" :key="game.gameid" class="game">
-			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames[game.gameid] ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
-			<div v-show="!collapsedGames[game.gameid]">
+			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
+			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
 						<tr v-for="event in events.get(game.gameid)" :key="event.id">
@@ -71,13 +71,13 @@
 				upcomingGames: [],
 				finishedGames: [],
 				// per-game collapsed state (true = collapsed)
-				collapsedGames: {}
+				collapsedGames: new Map()
 			}
 		},
 		methods: {
 			// toggle collapse state for a specific game
 			toggleCollapse(gameid) {
-				this.$set(this.collapsedGames, gameid, !this.collapsedGames[gameid]);
+				this.collapsedGames.set(gameid, !this.collapsedGames.get(gameid));
 			},
 			async fetchBoard(gameid) {
 				try {
@@ -147,7 +147,7 @@
 						this.events.set(game.gameid, []);
 						this.points.set(game.gameid, 0);
 						// initialize collapsed state for this game (default: expanded)
-						this.$set(this.collapsedGames, game.gameid, false);
+						this.collapsedGames.set(game.gameid, false);
 						this.fetchBoard(game.gameid);
 					}
 				} catch (err) {
