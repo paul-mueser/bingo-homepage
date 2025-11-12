@@ -19,7 +19,7 @@
 </template>
   
 <script>
-	import { fetchBingoBoard } from '../services/bingoService.js';
+	import { fetchBingoBoard, fetchBingoGames } from '../services/bingoService.js';
 
 	export default {
 		name: 'EventList',
@@ -34,6 +34,10 @@
 			}
 		},
 		methods: {
+			isBingo(line) {
+				return line.every(event => event.amounthappened >= event.amountneeded);
+			},
+			
 			async fetchBoard(gameid) {
 				try {
 					const result = await fetchBingoBoard(this.user, gameid);
@@ -45,10 +49,6 @@
 				}
 
 				let bingoCount = 0;
-
-				function isBingo(line) {
-					return line.every(event => event.amounthappened >= event.amountneeded);
-				}
 
 				for (let i = 0; i < 5; i++) {
 					if (isBingo(this.events.get(gameid)[i])) {
@@ -97,7 +97,6 @@
 						this.fetchBoard(game.gameid);
 					}
 				} catch (err) {
-					console.error('Error fetching bingo games:', err);
 				}
 			}
 		},
