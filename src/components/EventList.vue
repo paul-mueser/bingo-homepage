@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h1>Events</h1>
-        <div v-for="game in games" :key="game.gameid">
+        <div v-for="game in games" :key="game.gameid" class="game">
             <h2>{{ game.name }}</h2>
             <table>
                 <thead>
