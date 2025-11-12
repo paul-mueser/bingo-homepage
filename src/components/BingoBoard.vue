@@ -91,6 +91,7 @@
 					this.runningGames = this.runningGames.filter(game => game.gameid !== gameid);
 					this.upcomingGames = this.upcomingGames.filter(game => game.gameid !== gameid);
 					this.finishedGames = this.finishedGames.filter(game => game.gameid !== gameid);
+					return;
 				}
 
 				let bingoCount = 0;
