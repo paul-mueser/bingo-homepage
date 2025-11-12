@@ -97,6 +97,7 @@
 						this.fetchBoard(game.gameid);
 					}
 				} catch (err) {
+					console.error('Error fetching bingo games:', err);
 				}
 			}
 		},
