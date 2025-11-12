@@ -34,10 +34,6 @@
 			}
 		},
 		methods: {
-			isBingo(line) {
-				return line.every(event => event.amounthappened >= event.amountneeded);
-			},
-			
 			async fetchBoard(gameid) {
 				try {
 					const result = await fetchBingoBoard(this.user, gameid);
@@ -49,6 +45,10 @@
 				}
 
 				let bingoCount = 0;
+
+				function isBingo(line) {
+					return line.every(event => event.amounthappened >= event.amountneeded);
+				}
 
 				for (let i = 0; i < 5; i++) {
 					if (isBingo(this.events.get(gameid)[i])) {
