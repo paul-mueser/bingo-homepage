@@ -1,7 +1,38 @@
 <template>
     <div class="container">
       	<h1>{{ user }}</h1>
-		<div v-for="game in games" :key="game.gameid" class="game">
+		<h1>Running Games</h1>
+		<div v-for="game in runningGames" :key="game.gameid" class="game">
+			<h2>{{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
+			<table>
+				<tbody>
+					<tr v-for="event in events.get(game.gameid)" :key="event.id">
+					<td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[0].event }}</td>
+					<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[1].event }}</td>
+					<td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[2].event }}</td>
+					<td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[3].event }}</td>
+					<td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[4].event }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<h1>Upcomming Games</h1>
+		<div v-for="game in upcomingGames" :key="game.gameid" class="game">
+			<h2>{{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
+			<table>
+				<tbody>
+					<tr v-for="event in events.get(game.gameid)" :key="event.id">
+					<td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[0].event }}</td>
+					<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[1].event }}</td>
+					<td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[2].event }}</td>
+					<td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[3].event }}</td>
+					<td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[4].event }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<h1>Finished Games</h1>
+		<div v-for="game in finishedGames" :key="game.gameid" class="game">
 			<h2>{{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
 			<table>
 				<tbody>
@@ -30,7 +61,9 @@
 			return {
 				events: new Map(),
 				points: new Map(),
-				games: []
+				runningGames: [],
+				upcomingGames: [],
+				finishedGames: []
 			}
 		},
 		methods: {
@@ -91,7 +124,14 @@
 				try {
 					const result = await fetchBingoGames();
 					this.games = result.data;
-					for (const game of this.games) {
+					for (const game of result.data) {
+						if (game.status === 1) {
+							this.runningGames.push(game);
+						} else if (game.status === 0) {
+							this.upcomingGames.push(game);
+						} else if (game.status === 2) {
+							this.finishedGames.push(game);
+						}
 						this.events.set(game.gameid, []);
 						this.points.set(game.gameid, 0);
 						this.fetchBoard(game.gameid);
