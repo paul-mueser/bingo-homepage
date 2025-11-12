@@ -85,6 +85,9 @@
 						this.events.get(gameid).push(data.slice(i * 5, i * 5 + 5));
 					}
 				} catch (err) {
+					this.runningGames = this.runningGames.filter(game => game.gameid !== gameid);
+					this.upcomingGames = this.upcomingGames.filter(game => game.gameid !== gameid);
+					this.finishedGames = this.finishedGames.filter(game => game.gameid !== gameid);
 				}
 
 				let bingoCount = 0;
