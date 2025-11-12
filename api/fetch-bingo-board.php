@@ -51,7 +51,7 @@ $boardname = $data['boardname'];
 $gameid = $data['gameid'];
 
 // Fetch user from database
-$stmt = $conn->prepare('SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid, bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased, bingocategory.name AS "catagory", bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE bingoboards.name = ? AND bingoboards.gameid = ? ORDER BY bingoboards.y_col, bingoboards.x_row');
+$stmt = $conn->prepare('SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid, bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased, bingocategory.name AS "catagory", bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE bingoboards.name = ? AND bingoboards.bingogameid = ? ORDER BY bingoboards.y_col, bingoboards.x_row');
 $stmt->bind_param("si", $boardname, $gameid);
 $stmt->execute();
 $result = $stmt->get_result();
