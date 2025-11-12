@@ -2,10 +2,7 @@
   <div class="container">
     <div class="content">
       <button @click="toggleEventList" :disabled="currentComponent==='EventList'">Events</button>
-      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Julia'">Julia</button>
-      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Pia'">Pia</button>
-      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Moritz'">Moritz</button>
-      <button @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user==='Paul'">Paul</button>
+      <button v-for="user in users" :key="user.username" @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user===user.username">{{ user.username }}</button>
     </div>
     <div>
       <EventList v-if="currentComponent==='EventList'"/>
@@ -18,6 +15,7 @@
 // @ is an alias to /src
 import EventList from '@/components/EventList.vue';
 import BingoBoard from '@/components/BingoBoard.vue';
+import { fetchUsers } from '../services/bingoService.js';
 
 export default {
   name: 'BingoView',
@@ -27,6 +25,7 @@ export default {
   },
   data() {
     return {
+      users: [],
       currentComponent: "EventList",
       user: ""
     }
@@ -42,7 +41,17 @@ export default {
         this.user = buttonText;
         this.currentComponent = "BingoBoard";
       }, 50);
+    },
+    async prepareUsers() {
+      try {
+        const result = await fetchUsers();
+        this.users = result.data;
+      } catch (err) {
+      }
     }
+  },
+  mounted() {
+    this.prepareUsers();
   }
 }
 </script>

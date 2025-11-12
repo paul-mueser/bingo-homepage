@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const API_URL = '{{API_URL}}';
 
+export const fetchUsers = async () => {
+    const result = await axios.get(`${API_URL}/api/fetch-users`, { withCredentials: true });
+    return result.data;
+}
+
 export const fetchBingoGames = async () => {
     const result = await axios.get(`${API_URL}/api/fetch-bingo-games`, { withCredentials: true });
     return result.data;
