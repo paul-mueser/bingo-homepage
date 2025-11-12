@@ -74,7 +74,6 @@
 			}
 		},
 		methods: {
-			// toggle collapse state for a specific game
 			toggleCollapse(gameid) {
 				this.collapsedGames.set(gameid, !this.collapsedGames.get(gameid));
 			},
@@ -148,7 +147,6 @@
 						}
 						this.events.set(game.gameid, []);
 						this.points.set(game.gameid, 0);
-						// initialize collapsed state for this game (default: expanded)
 						this.fetchBoard(game.gameid);
 					}
 				} catch (err) {
