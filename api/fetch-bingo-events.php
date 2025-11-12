@@ -35,8 +35,13 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
 }
 
+$data = json_decode(file_get_contents("php://input"), true);
+
+$gameid = $data['gameid'];
+
 // Fetch user from database
-$stmt = $conn->prepare("SELECT * FROM bingoevent ORDER BY event");
+$stmt = $conn->prepare("SELECT * FROM bingoevent WHERE gameid = ? ORDER BY event");
+$stmt->bind_param("i", $gameid);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all(MYSQLI_ASSOC);
