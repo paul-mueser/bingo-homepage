@@ -91,4 +91,8 @@ export default {
   .highlight:hover {
     text-decoration: underline;
   }
+
+  .game {
+    outline-color: var(--text-color-highlight);
+  }
 </style>

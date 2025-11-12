@@ -56,8 +56,4 @@ export default {
   justify-content: space-between;
   white-space: nowrap;
 }
-
-.game {
-  outline-color: var(--text-color-highlight);
-}
 </style>
