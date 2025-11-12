@@ -23,16 +23,6 @@ try {
     exit();
 }
 
-// Table in this way (maybe x,y as point) (look if the text fits in the table)
-//create table matrices_2d (
-//    name varchar(20),
-//    x int, 
-//    y int, 
-//    text varchar(20),
-//    clicked boolean, 
-//    primary key (name, x, y)
-//);
-
 $DB_HOST = '{{DB_HOST}}';
 $DB_USER = '{{DB_USER}}';
 $DB_PASS = '{{DB_PASS}}';
@@ -45,14 +35,8 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-$boardname = $data['boardname'];
-$gameid = $data['gameid'];
-
 // Fetch user from database
-$stmt = $conn->prepare('SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid, bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased, bingocategory.name AS "catagory", bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE bingoboards.name = ? AND bingoboards.gameid = ? ORDER BY bingoboards.y_col, bingoboards.x_row');
-$stmt->bind_param("si", $boardname, $gameid);
+$stmt = $conn->prepare("SELECT * FROM bingogame ORDER BY gameid");
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all(MYSQLI_ASSOC);

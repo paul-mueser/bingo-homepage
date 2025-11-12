@@ -30,6 +30,12 @@ sed -i "s|{{DB_PASS}}|${DB_PASSWORD}|g" api/fetch-bingo-events.php
 sed -i "s|{{DB_NAME}}|${DB_NAME}|g" api/fetch-bingo-events.php
 sed -i "s|{{JWT_SECRET}}|${JWT_SECRET}|g" api/fetch-bingo-events.php
 
+sed -i "s|{{DB_HOST}}|${DB_HOST}|g" api/fetch-bingo-games.php
+sed -i "s|{{DB_USER}}|${DB_USER}|g" api/fetch-bingo-games.php
+sed -i "s|{{DB_PASS}}|${DB_PASSWORD}|g" api/fetch-bingo-games.php
+sed -i "s|{{DB_NAME}}|${DB_NAME}|g" api/fetch-bingo-games.php
+sed -i "s|{{JWT_SECRET}}|${JWT_SECRET}|g" api/fetch-bingo-games.php
+
 sed -i "s|{{DB_HOST}}|${DB_HOST}|g" api/update-bingo-event.php
 sed -i "s|{{DB_USER}}|${DB_USER}|g" api/update-bingo-event.php
 sed -i "s|{{DB_PASS}}|${DB_PASSWORD}|g" api/update-bingo-event.php
