@@ -81,6 +81,9 @@
 				try {
 					const result = await fetchBingoBoard(this.user, gameid);
 					const data = result.data;
+					if (!data || data.length === 0) {
+						throw new Error('No bingo board found');
+					}
 					for (let i = 0; i < 5; i++) {
 						this.events.get(gameid).push(data.slice(i * 5, i * 5 + 5));
 					}
