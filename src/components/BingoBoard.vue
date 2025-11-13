@@ -110,7 +110,8 @@
 
 			async updateEvent(gameid, eventid, increase) {
                 try {
-                    await updateBingoEvent(eventid, increase);
+                    const result = await updateBingoEvent(eventid, increase);
+					console.log(result);
 					this.fetchBoard(gameid);
                 }catch (err) {
                 }
@@ -124,6 +125,7 @@
 						throw new Error('No bingo board found');
 					}
 					this.events.set(gameid, []);
+					this.points.set(gameid, 0);
 					for (let i = 0; i < 5; i++) {
 						this.events.get(gameid).push(data.slice(i * 5, i * 5 + 5));
 					}
