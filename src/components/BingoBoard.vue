@@ -231,5 +231,14 @@
 		text-align: center;
 		margin-right: 0.25em;
 	}
+
+	.content {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    white-space: nowrap;
+    }
 </style>
   
