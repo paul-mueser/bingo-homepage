@@ -108,14 +108,6 @@
 				this.collapsedGames.set(gameid, !this.collapsedGames.get(gameid));
 			},
 
-			async updateEvent(gameid, eventid, increase) {
-                try {
-                    await updateBingoEvent(eventid, increase);
-					this.fetchBoard(gameid);
-                }catch (err) {
-                }
-            },
-
 			async fetchBoard(gameid) {
 				try {
 					const result = await fetchBingoBoard(this.user, gameid);
@@ -177,6 +169,14 @@
 
 				this.points.set(gameid, this.points.get(gameid) + bingoCount * 100);
 			},
+
+			async updateEvent(gameid, eventid, increase) {
+                try {
+                    await updateBingoEvent(eventid, increase);
+					this.fetchBoard(gameid);
+                }catch (err) {
+                }
+            },
 
 			async prepareBingoBoards() {
 				try {
