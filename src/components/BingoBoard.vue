@@ -12,7 +12,7 @@
 							{{ event[0].event }}
 							<div class="content">
 								<button @click="updateEventOnBoard(game.gameid, event[0].id, true)" :disabled="!event[0].amountbased && event[0].amounthappened >= event[0].amountneeded">Add 1</button>
-                            	<button @click="updateEventOnBoard(game.gameid, event[0].id, false)" :disabled="event[0].amounthappened <= -1">Sub 1</button>
+                            	<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event[0].amounthappened <= -1">Sub 1</button>
 							</div>
 						</td>
 						<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
@@ -172,8 +172,8 @@
 
 			async updateEventOnBoard(gameid, eventid, increase) {
                 try {
-                    const result = await updateBingoEvent(eventid, increase);
-					console.log(result);
+                    await updateBingoEvent(eventid, increase);
+					console.log(eventid);
 					this.fetchBoard(gameid);
                 }catch (err) {
                 }

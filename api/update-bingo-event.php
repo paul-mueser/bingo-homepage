@@ -62,10 +62,7 @@ if($stmt->execute()) {
     http_response_code(200);
     echo json_encode([
         'status' => 'success',
-        'message' => 'Record updated successfully ',
-        'amounthappened' => $amountHappened,
-        'increase' => $increase,
-        'eventid' => $eventid,
+        'message' => 'Record updated successfully '
     ]);
 } else {
     http_response_code(500);
