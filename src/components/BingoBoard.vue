@@ -123,6 +123,7 @@
 					if (!data || data.length === 0) {
 						throw new Error('No bingo board found');
 					}
+					this.events.set(gameid, []);
 					for (let i = 0; i < 5; i++) {
 						this.events.get(gameid).push(data.slice(i * 5, i * 5 + 5));
 					}
