@@ -113,6 +113,7 @@
                     await updateBingoEvent(eventid, increase);
 					await this.fetchBoard(gameid);
                 }catch (err) {
+					console.error('Failed to update event:', err);
                 }
             },
 
