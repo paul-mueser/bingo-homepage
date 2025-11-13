@@ -172,8 +172,7 @@
 
 			async updateEvent(gameid, eventid, increase) {
                 try {
-                    const result = await updateBingoEvent(eventid, increase);
-					console.log(result);
+                    await updateBingoEvent(eventid, increase);
 					this.fetchBoard(gameid);
                 }catch (err) {
                 }
