@@ -47,8 +47,8 @@
                         <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                         <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
                         <td class="content">
-                            <button @click="updateEvent(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">Add 1</button>
-                            <button @click="updateEvent(event.id, false)" :disabled="event.amounthappened <= -1">Sub 1</button>
+                            <button @click="updateEvent(event.id, true)" :disabled="true">Add 1</button>
+                            <button @click="updateEvent(event.id, false)" :disabled="true">Sub 1</button>
                         </td>
                         </tr>
                     </tbody>
@@ -74,8 +74,8 @@
                         <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                         <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
                         <td class="content">
-                            <button @click="updateEvent(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">Add 1</button>
-                            <button @click="updateEvent(event.id, false)" :disabled="event.amounthappened <= -1">Sub 1</button>
+                            <button @click="updateEvent(event.id, true)" :disabled="true">Add 1</button>
+                            <button @click="updateEvent(event.id, false)" :disabled="true">Sub 1</button>
                         </td>
                         </tr>
                     </tbody>

@@ -8,11 +8,41 @@
 				<table>
 					<tbody>
 						<tr v-for="event in events.get(game.gameid)" :key="event.id">
-						<td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[0].event }}</td>
-						<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[1].event }}</td>
-						<td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[2].event }}</td>
-						<td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[3].event }}</td>
-						<td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[4].event }}</td>
+						<td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+							{{ event[0].event }}
+							<div class="content">
+								<button @click="updateEvent(event[0].id, true)" :disabled="!event[0].amountbased && event[0].amounthappened >= event[0].amountneeded">Add 1</button>
+                            	<button @click="updateEvent(event[0].id, false)" :disabled="event[0].amounthappened <= -1">Sub 1</button>
+							</div>
+						</td>
+						<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+							{{ event[1].event }}
+							<div class="content">
+								<button @click="updateEvent(event[1].id, true)" :disabled="!event[1].amountbased && event[1].amounthappened >= event[1].amountneeded">Add 1</button>
+								<button @click="updateEvent(event[1].id, false)" :disabled="event[1].amounthappened <= -1">Sub 1</button>
+							</div>
+						</td>
+						<td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+							{{ event[2].event }}
+							<div class="content">
+								<button @click="updateEvent(event[2].id, true)" :disabled="!event[2].amountbased && event[2].amounthappened >= event[2].amountneeded">Add 1</button>
+								<button @click="updateEvent(event[2].id, false)" :disabled="event[2].amounthappened <= -1">Sub 1</button>
+							</div>
+						</td>
+						<td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+							{{ event[3].event }}
+							<div class="content">
+								<button @click="updateEvent(event[3].id, true)" :disabled="!event[3].amountbased && event[3].amounthappened >= event[3].amountneeded">Add 1</button>
+								<button @click="updateEvent(event[3].id, false)" :disabled="event[3].amounthappened <= -1">Sub 1</button>
+							</div>
+						</td>
+						<td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+							{{ event[4].event }}
+							<div class="content">
+								<button @click="updateEvent(event[4].id, true)" :disabled="!event[4].amountbased && event[4].amounthappened >= event[4].amountneeded">Add 1</button>
+								<button @click="updateEvent(event[4].id, false)" :disabled="event[4].amounthappened <= -1">Sub 1</button>
+							</div>
+						</td>
 						</tr>
 					</tbody>
 				</table>
@@ -56,7 +86,7 @@
 </template>
   
 <script>
-	import { fetchBingoBoard, fetchBingoGames } from '../services/bingoService.js';
+	import { fetchBingoBoard, fetchBingoGames, updateBingoEvent } from '../services/bingoService.js';
 
 	export default {
 		name: 'EventList',
@@ -77,6 +107,15 @@
 			toggleCollapse(gameid) {
 				this.collapsedGames.set(gameid, !this.collapsedGames.get(gameid));
 			},
+
+			async updateEvent(id, increase) {
+                try {
+                    await updateBingoEvent(id, increase);
+                    this.fetchAllEvents();
+                }catch (err) {
+                }
+            },
+
 			async fetchBoard(gameid) {
 				try {
 					const result = await fetchBingoBoard(this.user, gameid);
