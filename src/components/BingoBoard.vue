@@ -111,7 +111,7 @@
 			async updateEvent(gameid, eventid, increase) {
                 try {
                     await updateBingoEvent(eventid, increase);
-					await this.fetchBoard(gameid);
+					this.fetchBoard(gameid);
                 }catch (err) {
                 }
             },
