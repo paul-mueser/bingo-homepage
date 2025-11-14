@@ -7,7 +7,7 @@
 			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
-						<tr v-for="eventRow in events.get(game.gameid)" :key="event">
+						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
 							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
 								{{ event.event }}
 								<br/>
@@ -28,7 +28,7 @@
 			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
-						<tr v-for="eventRow in events.get(game.gameid)" :key="event.id">
+						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
 							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
 								{{ event.event }}
 								<br/>
@@ -45,7 +45,7 @@
 			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
-						<tr v-for="eventRow in events.get(game.gameid)" :key="event.id">
+						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
 							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
 								{{ event.event }}
 								<br/>
