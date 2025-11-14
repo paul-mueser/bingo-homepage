@@ -10,6 +10,8 @@
 						<tr v-for="eventRow in events.get(game.gameid)" :key="event">
 							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
 								{{ event.event }}
+								<br/>
+								<span v-if="event.amountbased">({{ event.amounthappened }} / {{ event.amountneeded }})</span>
 								<div class="content">
 									<button @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">Add 1</button>
 									<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1">Sub 1</button>
@@ -26,12 +28,12 @@
 			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
-						<tr v-for="event in events.get(game.gameid)" :key="event.id">
-						<td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[0].event }}</td>
-						<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[1].event }}</td>
-						<td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[2].event }}</td>
-						<td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[3].event }}</td>
-						<td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[4].event }}</td>
+						<tr v-for="eventRow in events.get(game.gameid)" :key="event.id">
+							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+								{{ event.event }}
+								<br/>
+								<span v-if="event.amountbased">({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -43,12 +45,12 @@
 			<div v-show="!collapsedGames.get(game.gameid)">
 				<table>
 					<tbody>
-						<tr v-for="event in events.get(game.gameid)" :key="event.id">
-						<td :class="event[0].amounthappened < event[0].amountneeded ? (event[0].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[0].event }}</td>
-						<td :class="event[1].amounthappened < event[1].amountneeded ? (event[1].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[1].event }}</td>
-						<td :class="event[2].amounthappened < event[2].amountneeded ? (event[2].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[2].event }}</td>
-						<td :class="event[3].amounthappened < event[3].amountneeded ? (event[3].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[3].event }}</td>
-						<td :class="event[4].amounthappened < event[4].amountneeded ? (event[4].amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">{{ event[4].event }}</td>
+						<tr v-for="eventRow in events.get(game.gameid)" :key="event.id">
+							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
+								{{ event.event }}
+								<br/>
+								<span v-if="event.amountbased">({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+							</td>
 						</tr>
 					</tbody>
 				</table>
