@@ -1,11 +1,10 @@
 <?php
 header("Content-Type: application/json");
+include 'secrets.php';
 
 require './vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
-
-$secret_key = "{{JWT_SECRET}}"; // Replace with your secret key
 
 if (!isset($_COOKIE['token'])) {
     http_response_code(401);

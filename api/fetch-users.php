@@ -1,11 +1,10 @@
 <?php
 header("Content-Type: application/json");
+include 'secrets.php';
 
 require './vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
-
-$secret_key = "{{JWT_SECRET}}";
 
 if (!isset($_COOKIE['token'])) {
     http_response_code(401);
@@ -22,11 +21,6 @@ try {
     echo json_encode(["error" => "Invalid token"]);
     exit();
 }
-
-$DB_HOST = '{{DB_HOST}}';
-$DB_USER = '{{DB_USER}}';
-$DB_PASS = '{{DB_PASS}}';
-$DB_NAME = '{{DB_NAME}}';
 
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 

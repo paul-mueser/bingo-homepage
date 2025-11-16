@@ -1,13 +1,9 @@
 <?php
 header("Content-Type: application/json");
+include 'secrets.php';
 
 require './vendor/autoload.php';
 use \Firebase\JWT\JWT;
-
-$DB_HOST = '{{DB_HOST}}';
-$DB_USER = '{{DB_USER}}';
-$DB_PASS = '{{DB_PASS}}';
-$DB_NAME = '{{DB_NAME}}';
 
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
@@ -32,9 +28,9 @@ if (!$user || !password_verify($password, $user['password_hash'])) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid credentials"]);
 } else {
-    $secret_key = "{{JWT_SECRET}}"; // Replace with your secret key
-    $issuer_claim = "{{SITE_URL}}"; // Replace with your domain
-    $audience_claim = "{{SITE_URL}}"; // Replace with your domain
+    $secret_key = $secret_key; // Replace with your secret key
+    $issuer_claim = $site_url; // Replace with your domain
+    $audience_claim = $site_url; // Replace with your domain
     $issuedat_claim = time(); // issued at
     $notbefore_claim = $issuedat_claim; // not before in seconds
     $expire_claim = $issuedat_claim + 3600; // expire time in seconds

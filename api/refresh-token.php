@@ -1,11 +1,10 @@
 <?php
 header("Content-Type: application/json");
+include 'secrets.php';
 
 require './vendor/autoload.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
-
-$secret_key = "{{JWT_SECRET}}"; // Replace with your secret key
 
 if (!isset($_COOKIE['refresh_token'])) {
     http_response_code(401);
@@ -18,8 +17,8 @@ $refresh_jwt = $_COOKIE['refresh_token'];
 try {
     $decoded = JWT::decode($refresh_jwt, new Key($secret_key, 'HS256'));
 
-    $issuer_claim = "{{SITE_URL}}"; // Replace with your domain
-    $audience_claim = "{{SITE_URL}}";
+    $issuer_claim = $site_url; // Replace with your domain
+    $audience_claim = $site_url;
     $issuedat_claim = time(); // issued at
     $notbefore_claim = $issuedat_claim; // not before in seconds
     $expire_claim = $issuedat_claim + 3600; // expire time in seconds
