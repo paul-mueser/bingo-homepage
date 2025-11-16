@@ -22,7 +22,7 @@ $username = $data['username'];
 $password = $data['password'];
 
 // Fetch user from database
-$stmt = $conn->prepare("SELECT id, password_hash FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT id, password_hash, isAdmin FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -48,7 +48,8 @@ if (!$user || !password_verify($password, $user['password_hash'])) {
         "exp" => $expire_claim,
         "data" => array(
             "id" => $user['id'],
-            "username" => $username
+            "username" => $username,
+            "isAdmin" => $user['isAdmin']
         )
     );
 
@@ -60,7 +61,8 @@ if (!$user || !password_verify($password, $user['password_hash'])) {
         "exp" => $refresh_expire_claim,
         "data" => array(
             "id" => $user['id'],
-            "username" => $username
+            "username" => $username,
+            "isAdmin" => $user['isAdmin']
         )
     );
 

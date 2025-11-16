@@ -32,7 +32,8 @@ try {
         "exp" => $expire_claim,
         "data" => array(
             "id" => $decoded->data->id,
-            "username" => $decoded->data->username
+            "username" => $decoded->data->username,
+            "isAdmin" => $decoded->data->isAdmin
         )
     );
 
@@ -42,7 +43,7 @@ try {
     setcookie("token", $jwt, $expire_claim, "/", "", true, true);
 
     http_response_code(200);
-    echo json_encode(["message" => "Token refreshed"]);
+    echo json_encode(["message" => "Token refreshed", "isAdmin" => $decoded->data->isAdmin]);
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid refresh token"]);

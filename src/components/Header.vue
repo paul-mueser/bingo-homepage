@@ -8,6 +8,10 @@
                     <a> | </a>
                     <router-link v-if="!isAuthenticated" to="/register">Register</router-link>
                     <router-link v-if="isAuthenticated" to="/login" @click="logout">Logout</router-link>
+                    <a> | </a>
+                    <router-link to="/admin">Admin</router-link>
+                    <a> | </a>
+                    <router-link to="/">Home</router-link>
                 </div>
             </div>
         </nav>
@@ -36,7 +40,6 @@
       async logout() {
       try {
           await logout();
-          //this.$router.push('/login');
       } catch (error) {
           console.error('Logout failed');
       }

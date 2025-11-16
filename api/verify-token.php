@@ -17,8 +17,13 @@ $jwt = $_COOKIE['token'];
 
 try {
     $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
-    http_response_code(200);
-    echo json_encode(["message" => "Token is valid"]);
+    if ($decoded->data->isAdmin === 1) {
+        http_response_code(200);
+        echo json_encode(["message" => "Token is valid", "isAdmin" => true]);
+    } else {
+        http_response_code(200);
+        echo json_encode(["message" => "Token is valid", "isAdmin" => false]);
+    }
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid token"]);
