@@ -9,6 +9,12 @@ node_modules
 .env.*.local
 secrets.php
 
+# dev environment files
+/db
+/db/*
+docker-compose.yml
+Dockerfile
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
