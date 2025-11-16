@@ -8,10 +8,8 @@
                     <a> | </a>
                     <router-link v-if="!isAuthenticated" to="/register">Register</router-link>
                     <router-link v-if="isAuthenticated" to="/login" @click="logout">Logout</router-link>
-                    <a> | </a>
-                    <router-link to="/admin">Admin</router-link>
-                    <a> | </a>
-                    <router-link to="/">Home</router-link>
+                    <a v-if="isAuthenticated"> | </a>
+                    <router-link v-if="isAuthenticated" to="/admin">Admin</router-link>
                 </div>
             </div>
         </nav>
