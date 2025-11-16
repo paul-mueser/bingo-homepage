@@ -27,6 +27,7 @@
       async handleLogin() {
         try {
           await login(this.username, this.password);
+          window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: true } }));
           this.$router.push('/');
         } catch (err) {
           console.error('Login failed');

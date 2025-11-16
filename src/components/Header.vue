@@ -27,6 +27,13 @@
     };
   },
   methods: {
+      _onAuthChanged(e) {
+        if (e && e.detail && typeof e.detail.isAuthenticated !== 'undefined') {
+          this.isAuthenticated = e.detail.isAuthenticated;
+        } else {
+          this.isAuthenticated = true;
+        }
+      },
       async checkAuth() {
         try {
           await verifyToken();
@@ -41,10 +48,17 @@
       } catch (error) {
           console.error('Logout failed');
       }
+      this.isAuthenticated = false;
+      window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: false } }));
       }
   },
   mounted() {
     this.checkAuth();
+    window.addEventListener('auth-changed', this._onAuthChanged);
+  }
+  ,
+  beforeUnmount() {
+    window.removeEventListener('auth-changed', this._onAuthChanged);
   }
   };
 </script>
