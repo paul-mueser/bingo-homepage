@@ -34,6 +34,7 @@ const routes = [
         if (response.data.isAdmin) {
           next();
         } else {
+          window.alert('You must be an admin to access this area.');
           next('/');
         }
       } catch (error) {
@@ -42,6 +43,7 @@ const routes = [
           if (refreshResponse.data.isAdmin) {
             next();
           } else {
+            window.alert('You must be an admin to access this area.');
             next('/');
           }
         } catch (refreshError) {
