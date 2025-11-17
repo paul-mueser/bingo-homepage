@@ -12,8 +12,7 @@ secrets.php
 # dev environment files
 /db
 /db/*
-docker-compose.yml
-Dockerfile
+/api/.htaccess
 
 # Log files
 npm-debug.log*
