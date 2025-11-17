@@ -1,4 +1,4 @@
-# bingo-homepage
+# Bingo Homepage
 
 ## Project setup
 
