@@ -27,3 +27,7 @@ export const updateBingoEvent = async (eventid, increase) => {
 export const createBingoGame = async (name) => {
     return await axios.post(`/api/create-bingo-game`, { name }, { withCredentials: true });
 }
+
+export const updateGameStatus = async (gameid, status) => {
+    return await axios.post(`/api/update-game-status`, { gameid, status }, { withCredentials: true });
+}

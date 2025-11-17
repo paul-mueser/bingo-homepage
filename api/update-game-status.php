@@ -16,11 +16,6 @@ $jwt = $_COOKIE['token'];
 
 try {
     $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
-    if ($decoded->data->isAdmin !== 1) {
-        http_response_code(403);
-        echo json_encode(["error" => "Insufficient permissions"]);
-        exit();
-    }
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid token"]);
@@ -36,34 +31,38 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$name = $data['name'];
+$gameid = $data['gameid'];
+$status = $data['status'];
 
-$stmt = $conn->prepare("SELECT * FROM bingogame WHERE name = ?");
-$stmt->bind_param("s", $name);
+
+$stmt = $conn->prepare("SELECT * FROM bingogame WHERE gameid = ?");
+$stmt->bind_param("s", $gameid);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all();
 $stmt->close();
 
-if (count($data) > 0) {
+if (count($data) == 0) {
     http_response_code(409);
-    echo json_encode(["error" => "Game with this name already exists"]);
+    echo json_encode(["error" => "Game does not exist"]);
     exit();
 }
 
-$stmt = $conn->prepare("INSERT INTO bingogame (name) VALUES (?)");
-$stmt->bind_param("s", $name);
+$stmt = $conn->prepare("UPDATE bingogame SET status = ? WHERE gameid = ?");
+$stmt->bind_param("ii", $status, $gameid);
 
-if ($stmt->execute()) {
+if($stmt->execute()) {
     http_response_code(200);
     echo json_encode([
         'status' => 'success',
-        'message' => 'Game created successfully '
+        'message' => 'Record updated successfully '
     ]);
 } else {
     http_response_code(500);
-    echo json_encode(["error" => "Failed to create game"]);
-    
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Error updating record'
+    ]);
 }
 
 $stmt->close();
