@@ -1,35 +1,27 @@
 import axios from 'axios';
 
-const API_URL = '';
-
 export const register = async (username, password, authCode) => {
-    return axios.post(`${API_URL}/api/register`, { username, password, authCode });
+    return axios.post(`/api/register`, { username, password, authCode });
 };
 
 export const login = async (username, password) => {
-    return await axios.post(`${API_URL}/api/login`, { username, password });
-};
-
-export const getProfile = async () => {
-    return axios.get(`${API_URL}/`, {
-        withCredentials: true
-    });
+    return await axios.post(`/api/login`, { username, password });
 };
 
 export const verifyToken = async () => {
-    return axios.get(`${API_URL}/api/verify-token`, {
+    return axios.get(`/api/verify-token`, {
         withCredentials: true
     });
 };
 
 export const refreshToken = async () => {
-    return axios.get(`${API_URL}/api/refresh-token`, {
+    return axios.get(`/api/refresh-token`, {
         withCredentials: true
     });
 }
 
 export const logout = async () => {
-    return axios.get(`${API_URL}/api/logout`, {
+    return axios.get(`/api/logout`, {
         withCredentials: true
     });
 }
