@@ -31,3 +31,12 @@ export const createBingoGame = async (name) => {
 export const updateGameStatus = async (gameid, status) => {
     return await axios.post(`/api/update-game-status`, { gameid, status }, { withCredentials: true });
 }
+
+export const createBingoEvents = async (events) => {
+    return await axios.post(`/api/create-bingo-events`, events, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+        });
+}

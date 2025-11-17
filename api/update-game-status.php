@@ -16,6 +16,11 @@ $jwt = $_COOKIE['token'];
 
 try {
     $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
+    if ($decoded->data->isAdmin !== 1) {
+        http_response_code(403);
+        echo json_encode(["error" => "Insufficient permissions"]);
+        exit();
+    }
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid token"]);

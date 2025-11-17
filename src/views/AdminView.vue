@@ -21,8 +21,6 @@
       <h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }}</h2>
       <div v-show="!collapsedGames.get(game.gameid)">
         <h3>Game {{ game.name }} Controls</h3>
-        <!-- Admin controls for running games go here -->
-        <!-- Things like count of events, start stop -->
         <p>Number of events: {{ events.get(game.gameid) ? events.get(game.gameid).length : 0 }}</p>
         <button type="submit" @click="stopGame(game.gameid)">Stop Game</button>
       </div>
@@ -35,14 +33,19 @@
         <!-- Admin controls for running games go here -->
         <!-- Things like count of events, players boards upload, event upload, start stop -->
         <p>Number of events: {{ events.get(game.gameid) ? events.get(game.gameid).length : 0 }}</p>
-        <button type="submit" @click="startGame(game.gameid)">Start Game</button>
+        <button type="submit" @click="startGame(game.gameid)">Start Game</button><br/><br/>
+        <div>
+          <label for="event-upload">Upload Events (CSV):</label>
+          <input ref="eventUpload" id="event-upload" type="file" accept=".csv"/>
+          <button type="submit" @click="uploadEvents(game.gameid)">Upload Events</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus } from '../services/bingoService.js';
+  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents } from '../services/bingoService.js';
   export default {
     name: 'AdminView',
     data() {
@@ -141,6 +144,26 @@
               console.error('Game does not exist or is already running');
             }
           }
+        }
+      },
+
+      async uploadEvents(gameid) {
+        const input = this.$refs.eventUpload[0];
+        if (!input || !input.files || input.files.length !== 1) return;
+
+        const file = input.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('files', file);
+        formData.append('gameid', gameid);
+
+        try {
+          await createBingoEvents(formData);
+          await this.prepareAdminPage();
+          await this.toggleCollapse(gameid);
+        } catch (err) {
+          console.error('Failed to upload events:', err);
         }
       }
     },
