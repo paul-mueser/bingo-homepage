@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '{{API_URL}}';
+const API_URL = '';
 
 export const fetchUsers = async () => {
     const result = await axios.get(`${API_URL}/api/fetch-users`, { withCredentials: true });
