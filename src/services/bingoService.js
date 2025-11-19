@@ -23,3 +23,29 @@ export const fetchBingoBoard = async (boardname, gameid) => {
 export const updateBingoEvent = async (eventid, increase) => {
     return await axios.post(`/api/update-bingo-event`, { eventid, increase }, { withCredentials: true });
 }
+
+export const createBingoGame = async (name) => {
+    return await axios.post(`/api/create-bingo-game`, { name }, { withCredentials: true });
+}
+
+export const updateGameStatus = async (gameid, status) => {
+    return await axios.post(`/api/update-game-status`, { gameid, status }, { withCredentials: true });
+}
+
+export const createBingoEvents = async (events) => {
+    return await axios.post(`/api/create-bingo-events`, events, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+        });
+}
+
+export const createBingoBoard = async (boardData) => {
+    return await axios.post(`/api/create-bingo-board`, boardData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+        });
+}

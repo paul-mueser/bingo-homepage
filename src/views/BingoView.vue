@@ -2,7 +2,7 @@
   <div class="container">
     <div class="content">
       <button @click="toggleEventList" :disabled="currentComponent==='EventList'">Events</button>
-      <button v-for="user in users" :key="user.username" @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&user===user.username">{{ user.username }}</button>
+      <button v-for="user in users" :key="user.username" @click="toggleBingo" :disabled="currentComponent==='BingoBoard'&&this.user===user.username">{{ user.username }}</button>
     </div>
     <div>
       <EventList v-if="currentComponent==='EventList'"/>
