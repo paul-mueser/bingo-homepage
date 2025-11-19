@@ -39,13 +39,24 @@
           <input ref="eventUpload" id="event-upload" type="file" accept=".csv"/>
           <button type="submit" @click="uploadEvents(game.gameid)">Upload Events</button>
         </div>
+        <div>
+          <label>Upload Bingo Board (CSV):</label>
+          <select v-model="selectedPlayer">
+            <option disabled value="">Please select a Player</option>
+            <option v-for="p in players" :key="p.id" :value="p.id">
+              {{ p.username }}
+            </option>
+          </select>
+          <input ref="bingoBoardUpload" id="bingo-board-upload" type="file" accept=".csv"/>
+          <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents } from '../services/bingoService.js';
+  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, createBingoBoard } from '../services/bingoService.js';
   export default {
     name: 'AdminView',
     data() {
@@ -56,7 +67,9 @@
         events: new Map(),
         collapsedGames: new Map(),
         newGameName: '',
-        newGameError: ''
+        newGameError: '',
+        players: [],
+        selectedPlayer: '',
       }
     },
     methods: {
@@ -163,12 +176,63 @@
           await this.prepareAdminPage();
           await this.toggleCollapse(gameid);
         } catch (err) {
-          console.error('Failed to upload events:', err);
+          if (err.response) {
+            if (err.response.status === 403) {
+              //console.error('Insufficient permissions to upload events');
+            } else if (err.response.status === 409) {
+              //console.error('Game does not exist or is already running');
+            }
+          }
+        }
+      },
+
+      async loadPlayers() {
+        try {
+          const result = await fetchUsers();
+          this.players = result.data;
+        } catch (err) {
+        }
+      },
+
+      async uploadBingoBoard(gameid) {
+        const input = this.$refs.bingoBoardUpload[0];
+        const selectedPlayer = this.$refs.playerName;
+        if (!input || !input.files || input.files.length !== 1) return;
+
+        const file = input.files[0];
+        if (!file) return;
+
+        if (!this.selectedPlayer) {
+          //TODO maybe show error to select player in the select box
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('files', file);
+        formData.append('gameid', gameid);
+        formData.append('playerid', this.selectedPlayer);
+
+        console.log('Uploading bingo board: ', formData);
+
+        try {
+          await createBingoBoard(formData);
+          this.selectedPlayer = '';
+          await this.prepareAdminPage();
+          await this.toggleCollapse(gameid);
+        } catch (err) {
+          if (err.response) {
+            if (err.response.status === 403) {
+              //console.error('Insufficient permissions to upload bingo board');
+            } else if (err.response.status === 409) {
+              //console.error('Game does not exist or is already running');
+            }
+          }
         }
       }
     },
     mounted() {
       this.prepareAdminPage();
+      this.loadPlayers();
     }
   }
 </script>

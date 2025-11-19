@@ -34,7 +34,21 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
 }
 
-$gameid = isset($_POST['gameid']) ? intval($_POST['gameid']) : 0;
+$gameid = isset($_POST['gameid']) ? intval($_POST['gameid']) : -1;
+
+if ($gameid <= 0) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid game ID"]);
+    exit();
+}
+
+$playerid = isset($_POST['playerid']) ? intval($_POST['playerid']) : -1;
+
+if ($playerid <= 0) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid player ID"]);
+    exit();
+}
 
 if (!isset($_FILES['files']) || $_FILES['files']['error'] !== UPLOAD_ERR_OK) {
     http_response_code(400);
@@ -63,14 +77,12 @@ if ($handle === false) {
 }
 
 while (($row = fgetcsv($handle)) !== false) {
-    $id = $row[0];
-    $event = $row[1];
-    $amountneeded = $row[2];
-    $amountbased = $row[3];
-    $bingocategoryid = $row[4];
+    $x_row = $row[0];
+    $y_col = $row[1];
+    $eventid = $row[2];
 
-    $stmt = $conn->prepare("INSERT INTO `bingoevent` (`id`, `event`, `amounthappened`, `amountneeded`, `amountbased`, `bingocategoryid`, `bingogameid`) VALUES (?, ?, 0, ?, ?, ?, ?)");
-    $stmt->bind_param("isiiii", $id, $event, $amountneeded, $amountbased, $bingocategoryid, $gameid);
+    $stmt = $conn->prepare("INSERT INTO `bingoboards` (`playerid`, `x_row`, `y_col`, `eventid`, `bingogameid`) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("iiiii", $playerid, $x_row, $y_col, $eventid, $gameid);
     $stmt->execute();
     $stmt->close();
 }
@@ -78,7 +90,7 @@ while (($row = fgetcsv($handle)) !== false) {
 http_response_code(200);
 echo json_encode([
     'status' => 'success',
-    'message' => 'Events uploaded successfully'
+    'message' => 'Board uploaded successfully'
 ]);
 
 fclose($handle);

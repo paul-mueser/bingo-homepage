@@ -40,3 +40,12 @@ export const createBingoEvents = async (events) => {
             withCredentials: true
         });
 }
+
+export const createBingoBoard = async (boardData) => {
+    return await axios.post(`/api/create-bingo-board`, boardData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+        });
+}
