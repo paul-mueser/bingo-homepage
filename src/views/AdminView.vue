@@ -36,7 +36,7 @@
         <button type="submit" @click="startGame(game.gameid)">Start Game</button><br/><br/>
         <div>
           <label for="event-upload">Upload Events (CSV):</label>
-          <input ref="eventUpload" id="event-upload" type="file" accept=".csv"/>
+          <input :ref="'eventUpload' + game.gameid" id="event-upload" type="file" accept=".csv"/>
           <button type="submit" @click="uploadEvents(game.gameid)">Upload Events</button>
         </div>
         <div>
@@ -47,7 +47,7 @@
               {{ p.username }}
             </option>
           </select>
-          <input ref="bingoBoardUpload" id="bingo-board-upload" type="file" accept=".csv"/>
+          <input :ref="'bingoBoardUpload' + game.gameid" id="bingo-board-upload" type="file" accept=".csv"/>
           <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
         </div>
       </div>
@@ -161,7 +161,7 @@
       },
 
       async uploadEvents(gameid) {
-        const input = this.$refs.eventUpload[0];
+        const input = this.$refs['eventUpload' + gameid][0];
         if (!input || !input.files || input.files.length !== 1) return;
 
         const file = input.files[0];
@@ -195,8 +195,7 @@
       },
 
       async uploadBingoBoard(gameid) {
-        const input = this.$refs.bingoBoardUpload[0];
-        const selectedPlayer = this.$refs.playerName;
+        const input = this.$refs['bingoBoardUpload' + gameid][0];
         if (!input || !input.files || input.files.length !== 1) return;
 
         const file = input.files[0];
@@ -245,10 +244,6 @@
     flex-direction: row;
     justify-content: space-between;
     white-space: nowrap;
-  }
-
-  .game {
-    margin-bottom: 1em;
   }
 
   .game-title {

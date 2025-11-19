@@ -96,5 +96,6 @@ export default {
     outline-style: solid;
     outline-color: var(--text-color-highlight);
     outline-offset: 4px;
+    margin-bottom: 1em;
   }
 </style>
