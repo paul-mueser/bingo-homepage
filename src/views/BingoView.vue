@@ -56,13 +56,16 @@ export default {
 }
 </script>
 
-<style scoped>
-.content {
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  white-space: nowrap;
-}
+<style>
+  .not-done {
+	  background-color: red;
+	}
+
+	.done {
+		background-color: green;
+	}
+
+	.impossible {
+    background-color: black;
+  }
 </style>

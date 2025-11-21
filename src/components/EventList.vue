@@ -20,8 +20,8 @@
                         <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                         <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
                         <td class="content">
-                            <button @click="updateEventInList(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">Add 1</button>
-                            <button @click="updateEventInList(event.id, false)" :disabled="event.amounthappened <= -1">Sub 1</button>
+                            <button @click="updateEventInList(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">+</button>
+                            <button @click="updateEventInList(event.id, false)" :disabled="event.amounthappened <= -1">-</button>
                         </td>
                         </tr>
                     </tbody>
@@ -38,7 +38,6 @@
                         <th>Event Name</th>
                         <th>Happened/Needed</th>
                         <th>Done?</th>
-                        <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,10 +45,6 @@
                         <td>{{ event.event }}</td>
                         <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                         <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
-                        <td class="content">
-                            <button @click="updateEventInList(event.id, true)" :disabled="true">Add 1</button>
-                            <button @click="updateEventInList(event.id, false)" :disabled="true">Sub 1</button>
-                        </td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,7 +60,6 @@
                         <th>Event Name</th>
                         <th>Happened/Needed</th>
                         <th>Done?</th>
-                        <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,10 +67,6 @@
                         <td>{{ event.event }}</td>
                         <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
                         <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
-                        <td class="content">
-                            <button @click="updateEventInList(event.id, true)" :disabled="true">Add 1</button>
-                            <button @click="updateEventInList(event.id, false)" :disabled="true">Sub 1</button>
-                        </td>
                         </tr>
                     </tbody>
                 </table>
@@ -151,38 +141,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .content {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    white-space: nowrap;
-    }
-    
-    .not-done {
-    background-color: red;
-    }
-
-    .done {
-        background-color: green;
-    }
-
-    .impossible {
-        background-color: black;
-    }
-
-    .game-title {
-		cursor: pointer;
-		user-select: none;
-		margin: 0;
-	}
-
-	.caret {
-		display: inline-block;
-		width: 1.1em;
-		text-align: center;
-		margin-right: 0.25em;
+    button {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
 	}
 </style>
   

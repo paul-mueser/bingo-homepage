@@ -5,10 +5,10 @@
                 <div class="content" style="font-size: 2rem;">
                     <router-link v-if="isAuthenticated" to="/">Home</router-link>
                     <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-                    <a v-if="isAuthenticated"> | </a>
-                    <router-link v-if="isAuthenticated" to="/admin">Admin</router-link>
                     <a> | </a>
+                    <router-link v-if="isAuthenticated" to="/admin">Admin</router-link>
                     <router-link v-if="!isAuthenticated" to="/register">Register</router-link>
+                    <a v-if="isAuthenticated"> | </a>
                     <router-link v-if="isAuthenticated" to="/login" @click="logout">Logout</router-link>
                 </div>
             </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { verifyToken } from '../services/authService.js';
+  import { verifyToken, refreshToken } from '../services/authService.js';
   import { logout } from '../services/authService.js';
 
   export default {
@@ -39,7 +39,12 @@
           await verifyToken();
           this.isAuthenticated = true;
         } catch (error) {
-          this.isAuthenticated = false;
+          try {
+            await refreshToken();
+            this.isAuthenticated = true;
+          } catch (error) {
+            this.isAuthenticated = false;
+          }
         }
       },
       async logout() {
@@ -66,6 +71,7 @@
 <style scoped>
 header {
   position: fixed;
+  z-index: 1000;
   width: 100%;
   background-color: var(--background-transparent);
   padding-top: .5rem;
@@ -80,12 +86,9 @@ header {
 .content {
   margin-left: -10px;
   margin-right: -10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  white-space: nowrap;
 }
 
+/* Blue highlight for active/hovering page */
 .router-link-active {
   color: var(--text-color-highlight);
 }

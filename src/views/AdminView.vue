@@ -237,28 +237,6 @@
 </script>
 
 <style scoped>
-  .content {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    white-space: nowrap;
-  }
-
-  .game-title {
-		cursor: pointer;
-		user-select: none;
-		margin: 0;
-	}
-
-	.caret {
-		display: inline-block;
-		width: 1.1em;
-		text-align: center;
-		margin-right: 0.25em;
-	}
-
   .input-error {
     border: 1px solid #e74c3c;
   }

@@ -8,13 +8,16 @@
 				<table>
 					<tbody>
 						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
-							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
-								{{ event.event }}
-								<br/>
-								<span v-if="event.amountbased">({{ event.amounthappened }} / {{ event.amountneeded }})</span>
-								<div class="content">
-									<button @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">Add 1</button>
-									<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1">Sub 1</button>
+							<td v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done') + (!event.amountbased ? ' clickableField' : '')" @click="!event.amountbased && handleClick(game.gameid, event)">
+								<div class="wrapper">
+									<div class="cell-text">
+										{{ event.event }}
+									</div>
+									<div v-if="event.amountbased" class="bottom content">
+										<button @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">+</button>
+										<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+										<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1">-</button>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -29,10 +32,15 @@
 				<table>
 					<tbody>
 						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
-							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
-								{{ event.event }}
-								<br/>
-								<span v-if="event.amountbased">({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+							<td v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')">
+								<div class="wrapper">
+									<div class="cell-text">
+										{{ event.event }}
+									</div>
+									<div v-if="event.amountbased" class="bottom content">
+										<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -46,10 +54,15 @@
 				<table>
 					<tbody>
 						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
-							<td v-for="event in eventRow" :key="event.id" :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'">
-								{{ event.event }}
-								<br/>
-								<span v-if="event.amountbased">({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+							<td v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')">
+								<div class="wrapper">
+									<div class="cell-text">
+										{{ event.event }}
+									</div>
+									<div v-if="event.amountbased" class="bottom content">
+										<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -152,6 +165,19 @@
                 }
             },
 
+			async handleClick(gameid, event) {
+				if (event.amounthappened < 1) {
+					await this.updateEventOnBoard(gameid, event.id, true);
+				} else {
+					try {
+						await updateBingoEvent(event.id, false);
+						await updateBingoEvent(event.id, false);
+						this.fetchBoard(gameid);
+					} catch (err) {
+					}
+				}
+			},
+
 			async prepareBingoBoards() {
 				try {
 					const result = await fetchBingoGames();
@@ -183,38 +209,59 @@
   
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-	.not-done {
-	background-color: red;
+	table {
+		height: 762px;
+		width: 762px;
 	}
 
-	.done {
-		background-color: green;
+	.bingo-field {
+		box-sizing: border-box;
+		width: 150px;
+		height: 150px;
+		border: 1px solid black;
+		vertical-align: middle;
 	}
 
-	.impossible {
-        background-color: black;
-    }
+	.wrapper {
+		display: flex;
+  		flex-direction: column;
+		height: 146px;
+	}
 
-	.game-title {
+	.cell-text {
+		overflow: auto;
+		text-align: left;
+		max-height: 146px;
+		max-width: 150px;
+	}
+
+	.bottom {
+		margin-top: auto;
+	}
+
+	.clickableField {
 		cursor: pointer;
+		position: relative;
 		user-select: none;
-		margin: 0;
 	}
 
-	.caret {
-		display: inline-block;
-		width: 1.1em;
-		text-align: center;
-		margin-right: 0.25em;
+	.clickableField::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		mix-blend-mode: lighten;
+		transition: background-color .15s ease, opacity .15s ease;
 	}
 
-	.content {
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    white-space: nowrap;
-    }
+	.clickableField:hover::before {
+		background-color: rgba(255, 255, 255, 0.3);
+	}
+
+	button {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+	}
 </style>
   
