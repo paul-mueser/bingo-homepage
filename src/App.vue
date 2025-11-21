@@ -20,7 +20,8 @@ export default {
     return {
       DESIGN_WIDTH: 800,
       scale: 1,
-      marginLeft: 'auto'
+      marginLeft: 'auto',
+      marginTop: 0
     }
   },
   computed: {
@@ -31,6 +32,7 @@ export default {
         width: this.DESIGN_WIDTH + 'px',
         marginLeft: this.marginLeft,
         marginRight: 'auto',
+        marginTop: this.marginTop + 'px',
         willChange: 'transform'
       };
     }
@@ -39,17 +41,13 @@ export default {
     updateScale() {
       this.scale = Math.min(document.documentElement.clientWidth / this.DESIGN_WIDTH, 1);
       this.marginLeft = this.scale < 1 ? '0' : 'auto';
-    },
-
-    headerHeight() {
       let header = this.$refs.header.$el.clientHeight;
-      this.$refs.body.style.marginTop = (header + 16) + "px";
+      this.marginTop = header + 16;
     }
   },
   mounted() {
     this.updateScale();
     window.addEventListener('resize', this.updateScale);
-    this.headerHeight();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.updateScale);
