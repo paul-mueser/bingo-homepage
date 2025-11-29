@@ -23,6 +23,17 @@
         <h3>Game {{ game.name }} Controls</h3>
         <p>Number of events: {{ events.get(game.gameid) ? events.get(game.gameid).length : 0 }}</p>
         <button type="submit" @click="stopGame(game.gameid)">Stop Game</button>
+        <div>
+          <label>Upload Bingo Board (CSV):</label>
+          <select v-model="selectedPlayer">
+            <option disabled value="">Please select a Player</option>
+            <option v-for="p in players" :key="p.id" :value="p.id">
+              {{ p.username }}
+            </option>
+          </select>
+          <input :ref="'bingoBoardUpload' + game.gameid" id="bingo-board-upload" type="file" accept=".csv"/>
+          <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
+        </div>
       </div>
     </div>
     <h1>Upcoming Games</h1>
