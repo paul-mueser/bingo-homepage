@@ -35,12 +35,19 @@ $eventid = $data['eventid'];
 $increase = $data['increase'];
 
 // Fetch user from database
-$stmt = $conn->prepare("SELECT amounthappened FROM bingoevent WHERE id = ?");
-$stmt->bind_param("i", $eventid);
+$stmt = $conn->prepare("SELECT amounthappened FROM bingoevent WHERE EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingoevent.bingogameid) AND id = ?");
+$stmt->bind_param("ii", $decoded->data->id, $eventid);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_assoc();
 $stmt->close();
+
+if (!$data) {
+    http_response_code(403);
+    echo json_encode(["error" => "User isn't participating in this bingo game or the event hasn't been found"]);
+    $conn->close();
+    exit();
+}
 
 $amountHappened = $data['amounthappened'];
 if ($increase) {
