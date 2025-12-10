@@ -30,8 +30,8 @@ if ($conn->connect_error) {
 }
 
 // Fetch user from database
-$stmt = $conn->prepare("SELECT * FROM bingogame WHERE EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingogame.gameid) ORDER BY gameid");
-$stmt->bind_param("i", $decoded->data->id);
+$stmt = $conn->prepare("SELECT * FROM bingogame WHERE (EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingogame.gameid) OR ?) ORDER BY gameid");
+$stmt->bind_param("ii", $decoded->data->id, $decoded->data->isAdmin);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all(MYSQLI_ASSOC);
