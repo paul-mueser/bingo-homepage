@@ -43,8 +43,7 @@ $userid = $data['userid'];
 $stmt = $conn->prepare("INSERT INTO participants (gameid, userid) VALUES (?, ?)");
 $stmt->bind_param("ii", $gameid, $userid);
 $stmt->execute();
-$result = $stmt->get_result();
-$data = $result->fetch_all();
+
 $stmt->close();
 
 http_response_code(200);

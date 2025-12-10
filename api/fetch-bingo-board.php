@@ -45,8 +45,8 @@ $boardname = $data['boardname'];
 $gameid = $data['gameid'];
 
 // Fetch user from database
-$stmt = $conn->prepare('SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid AS "id", bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased, bingocategory.name AS "catagory", bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid LEFT JOIN users ON bingoboards.playerid = users.id WHERE EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = ?) AND users.username = ? AND bingoboards.bingogameid = ? ORDER BY bingoboards.y_col, bingoboards.x_row');
-$stmt->bind_param("iisi", $decoded->data->id, $gameid, $boardname, $gameid);
+$stmt = $conn->prepare('SELECT bingoboards.x_row, bingoboards.y_col, bingoboards.eventid AS "id", bingoevent.event, bingoevent.amounthappened, bingoevent.amountneeded, bingoevent.amountbased, bingocategory.name AS "catagory", bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid LEFT JOIN users ON bingoboards.playerid = users.id WHERE EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingoboards.bingogameid) AND users.username = ? AND bingoboards.bingogameid = ? ORDER BY bingoboards.y_col, bingoboards.x_row');
+$stmt->bind_param("isi", $decoded->data->id, $boardname, $gameid);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all(MYSQLI_ASSOC);
