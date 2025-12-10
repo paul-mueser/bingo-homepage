@@ -16,6 +16,11 @@ $jwt = $_COOKIE['token'];
 
 try {
     $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
+    if ($decoded->data->isAdmin !== 1) {
+        http_response_code(403);
+        echo json_encode(["error" => "Insufficient permissions"]);
+        exit();
+    }
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid token"]);
@@ -29,19 +34,23 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
 }
 
-// Fetch user from database
-$stmt = $conn->prepare("SELECT * FROM bingogame WHERE EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingogame.gameid) ORDER BY gameid");
-$stmt->bind_param("i", $decoded->data->id);
+$data = json_decode(file_get_contents("php://input"), true);
+
+$gameid = $data['gameid'];
+$userid = $data['userid'];
+
+
+$stmt = $conn->prepare("INSERT INTO participants (gameid, userid) VALUES (?, ?)");
+$stmt->bind_param("ii", $gameid, $userid);
 $stmt->execute();
-$result = $stmt->get_result();
-$data = $result->fetch_all(MYSQLI_ASSOC);
+
+$stmt->close();
 
 http_response_code(200);
 echo json_encode([
     'status' => 'success',
-    'data'   => $data
+    'message' => 'Participant added successfully'
 ]);
 
-$stmt->close();
 $conn->close();
 ?>
