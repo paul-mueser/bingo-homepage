@@ -49,3 +49,7 @@ export const createBingoBoard = async (boardData) => {
             withCredentials: true
         });
 }
+
+export const addParticipant = async (gameid, userid) => {
+    return await axios.post(`/api/add-participant`, { gameid, userid }, { withCredentials: true });
+}

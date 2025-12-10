@@ -34,6 +34,16 @@
           <input :ref="'bingoBoardUpload' + game.gameid" id="bingo-board-upload" type="file" accept=".csv"/>
           <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
         </div>
+        <div>
+          <label>Add participant:</label>
+          <select v-model="selectedPlayer">
+            <option disabled value="">Please select a User</option>
+            <option v-for="p in players" :key="p.id" :value="p.id">
+              {{ p.username }}
+            </option>
+          </select>
+          <button type="submit" @click="addParticipant(game.gameid)" :disabled="this.selectedPlayer === ''">Add Participant</button>
+        </div>
       </div>
     </div>
     <h1>Upcoming Games</h1>
@@ -61,13 +71,23 @@
           <input :ref="'bingoBoardUpload' + game.gameid" id="bingo-board-upload" type="file" accept=".csv"/>
           <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
         </div>
+        <div>
+          <label>Add participant:</label>
+          <select v-model="selectedPlayer">
+            <option disabled value="">Please select a User</option>
+            <option v-for="p in players" :key="p.id" :value="p.id">
+              {{ p.username }}
+            </option>
+          </select>
+          <button type="submit" @click="addParticipant(game.gameid)" :disabled="this.selectedPlayer === ''">Add Participant</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, createBingoBoard } from '../services/bingoService.js';
+  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, createBingoBoard, addParticipant } from '../services/bingoService.js';
   export default {
     name: 'AdminView',
     data() {
@@ -233,6 +253,28 @@
           if (err.response) {
             if (err.response.status === 403) {
               //console.error('Insufficient permissions to upload bingo board');
+            } else if (err.response.status === 409) {
+              //console.error('Game does not exist or is already running');
+            }
+          }
+        }
+      },
+
+      async addParticipant(gameid) {
+        if (!this.selectedPlayer) {
+          //TODO maybe show error to select player in the select box
+          return;
+        }
+
+        try {
+          await addParticipant(gameid, this.selectedPlayer);
+          this.selectedPlayer = '';
+          await this.prepareAdminPage();
+          await this.toggleCollapse(gameid);
+        } catch (err) {
+          if (err.response) {
+            if (err.response.status === 403) {
+              //console.error('Insufficient permissions to add participant');
             } else if (err.response.status === 409) {
               //console.error('Game does not exist or is already running');
             }
