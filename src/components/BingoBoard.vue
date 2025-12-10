@@ -202,7 +202,6 @@
 			}
 		},
 		mounted() {
-			console.log(this.user);
 			this.prepareBingoBoards();
 		}
 	}
