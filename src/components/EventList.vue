@@ -119,14 +119,12 @@
                     for (const game of this.games) {
                         if (game.status === 1) {
 							this.runningGames.push(game);
-							this.collapsedGames.set(game.gameid, false);
 						} else if (game.status === 0) {
 							this.upcomingGames.push(game);
-							this.collapsedGames.set(game.gameid, true);
 						} else if (game.status === 2) {
 							this.finishedGames.push(game);
-                            this.collapsedGames.set(game.gameid, true);
 						}
+                        this.collapsedGames.set(game.gameid, true);
                     }
                     this.fetchAllEvents();
                 } catch (err) {

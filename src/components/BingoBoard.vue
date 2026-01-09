@@ -185,14 +185,12 @@
 					for (const game of result.data) {
 						if (game.status === 1) {
 							this.runningGames.push(game);
-							this.collapsedGames.set(game.gameid, false);
 						} else if (game.status === 0) {
 							this.upcomingGames.push(game);
-							this.collapsedGames.set(game.gameid, true);
 						} else if (game.status === 2) {
 							this.finishedGames.push(game);
-							this.collapsedGames.set(game.gameid, true);
 						}
+						this.collapsedGames.set(game.gameid, true);
 						this.events.set(game.gameid, []);
 						this.points.set(game.gameid, 0);
 						this.fetchBoard(game.gameid);
