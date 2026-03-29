@@ -1,5 +1,5 @@
 <template>
-    <v-container class="game">
+    <v-container class="game" height="534px">
         <v-row>
             <v-col cols="1/2">Player</v-col>
             <v-col cols="1/2">Score</v-col>
