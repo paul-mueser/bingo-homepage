@@ -15,8 +15,18 @@ export const fetchBingoEvents = async (gameid) => {
     return result.data;
 };
 
-export const fetchBingoBoard = async (boardname, gameid) => {
-    const result = await axios.post(`/api/fetch-bingo-board`, { boardname, gameid }, { withCredentials: true });
+export const fetchBingoBoard = async (userid, gameid) => {
+    const result = await axios.post(`/api/fetch-bingo-board`, { userid, gameid }, { withCredentials: true });
+    return result.data;
+}
+
+export const fetchLeaderboard = async (gameid) => {
+    const result = await axios.post(`/api/fetch-leaderboard`, { gameid }, { withCredentials: true });
+    return result.data;
+}
+
+export const fetchParticipants = async (gameid) => {
+    const result = await axios.post(`/api/fetch-participants`, { gameid }, { withCredentials: true });
     return result.data;
 }
 

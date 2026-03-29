@@ -1,20 +1,20 @@
 <template>
-    <div class="container">
+    <v-container>
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
         <div>
-          <input v-model="username" type="text" placeholder="Username" required />
+          <input v-model="username" type="text" autocomplete="username" placeholder="Username" required />
         </div>
         <div>
-          <input v-model="password" type="password" placeholder="Password" required />
+          <input v-model="password" type="password" autocomplete="current-password" placeholder="Password" required />
         </div>
         <button type="submit">Login</button>
       </form>
-    </div>
+    </v-container>
   </template>
   
   <script>
-  import { login } from '../services/authService';
+  import { login } from '@/services/authService';
   
   export default {
     data() {

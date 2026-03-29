@@ -1,58 +1,65 @@
 <template>
-  <Header ref="header"></Header>
-  <div class="background">
-    <div ref="scaleWrap" :style="scaleStyle">
+  <v-app>
+    <TopNavView v-if="this.isAuthenticated" :key="this.isAuthenticated"></TopNavView>
+    <div class="background">
       <div ref="body">
         <router-view/>
       </div>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
-import Header from './components/Header.vue';
+  import TopNavView from '@/views/TopNavView.vue';
+  import { verifyToken, refreshToken } from '@/services/authService.js';
 
-export default {
-  components: {
-    Header
-  },
+  export default {
   data() {
     return {
-      DESIGN_WIDTH: 800,
-      scale: 1,
-      marginLeft: 'auto',
-      marginTop: 0
-    }
+      isAuthenticated: false
+    };
   },
-  computed: {
-    scaleStyle() {
-      return {
-        transform: `scale(${this.scale})`,
-        transformOrigin: 'top left',
-        width: this.DESIGN_WIDTH + 'px',
-        marginLeft: this.marginLeft,
-        marginRight: 'auto',
-        marginTop: this.marginTop + 'px',
-        willChange: 'transform'
-      };
-    }
+  components: {
+    TopNavView
   },
   methods: {
-    updateScale() {
-      this.scale = Math.min(document.documentElement.clientWidth / this.DESIGN_WIDTH, 1);
-      this.marginLeft = this.scale < 1 ? '0' : 'auto';
-      let header = this.$refs.header.$el.clientHeight;
-      this.marginTop = header + 16;
-    }
+      _onAuthChanged(e) {
+        if (e && e.detail && typeof e.detail.isAuthenticated !== 'undefined') {
+          this.isAuthenticated = e.detail.isAuthenticated;
+        } else {
+          this.checkAuth();
+        }
+      },
+      async checkAuth() {
+        try {
+          await verifyToken();
+          this.isAuthenticated = true;
+        } catch (error) {
+          try {
+            await refreshToken();
+            this.isAuthenticated = true;
+          } catch (error) {
+            this.isAuthenticated = false;
+          }
+        }
+      }
   },
   mounted() {
-    this.updateScale();
-    window.addEventListener('resize', this.updateScale);
+    this.checkAuth();
+    window.addEventListener('auth-changed', this._onAuthChanged);
+  }
+  ,
+  beforeUnmount() {
+    window.removeEventListener('auth-changed', this._onAuthChanged);
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.updateScale);
-  },
-};
+  watch: {
+    '$route.name' (name) {
+      if (name === 'Login') {
+        this.checkAuth();
+      }
+    }
+  }
+  };
 </script>
 
 <style>
@@ -83,16 +90,19 @@ export default {
     transition: background-color .8s ease, color .8s ease;
   }
 
+  .contentWrap {
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+
   .container {
     box-sizing: border-box;
     z-index: auto;
     display: flex;
     flex-direction: column;
     line-height: 24px;
-    width: 44%;
-    min-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 120px;
+    margin-right: 120px;
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -104,15 +114,6 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     white-space: nowrap;
-  }
-
-  @media screen and (max-width: 800px) {
-    div.container {
-      width: 100%;
-      min-width: 100%;
-      margin-left: 0px;
-      margin-right: 1rem;
-    }
   }
 
   .game {
@@ -136,27 +137,15 @@ export default {
 		margin-right: 0.25em;
 	}
 
-  button {
-    cursor: pointer;
-    user-select: none;
-    background-color: var(--text-color);
-    color: var(--background-color);
-    border: 1px solid var(--text-color-highlight);
-    transition: background-color .4s ease, color .4s ease, border-color .4s ease;
-    border-radius: 4px;
-    margin-left: 2px;
-    margin-right: 2px;
-  }
+  .not-done {
+	  background-color: red;
+	}
 
-  button:hover {
-    cursor: pointer;
-    background-color: var(--text-color-highlight);
-    color: var(--text-color)
-  }
+	.done {
+		background-color: green;
+	}
 
-  button:disabled {
-    cursor: default;
-    background-color: gray;
-    color: var(--background-color);
+	.impossible {
+    background-color: black;
   }
 </style>

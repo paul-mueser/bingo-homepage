@@ -1,166 +1,69 @@
 <template>
-    <div class="container">
-      	<h1>{{ user }}</h1>
-		<h1>Running Games</h1>
-		<div v-for="game in runningGames" :key="game.gameid" class="game">
-			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
-			<div v-show="!collapsedGames.get(game.gameid)">
-				<table>
-					<tbody>
-						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
-							<td v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done') + (!event.amountbased ? ' clickableField' : '')" @click="!event.amountbased && handleClick(game.gameid, event)">
-								<div class="wrapper">
-									<div class="cell-text">
-										{{ event.event }}
-									</div>
-									<div v-if="event.amountbased" class="bottom content">
-										<button @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">+</button>
-										<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
-										<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1">-</button>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<h1>Upcomming Games</h1>
-		<div v-for="game in upcomingGames" :key="game.gameid" class="game">
-			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
-			<div v-show="!collapsedGames.get(game.gameid)">
-				<table>
-					<tbody>
-						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
-							<td v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')">
-								<div class="wrapper">
-									<div class="cell-text">
-										{{ event.event }}
-									</div>
-									<div v-if="event.amountbased" class="bottom content">
-										<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<h1>Finished Games</h1>
-		<div v-for="game in finishedGames" :key="game.gameid" class="game">
-			<h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }} ({{ points.get(game.gameid) }} Punkte)</h2>
-			<div v-show="!collapsedGames.get(game.gameid)">
-				<table>
-					<tbody>
-						<tr v-for="eventRow in events.get(game.gameid)" :key="eventRow">
-							<td v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')">
-								<div class="wrapper">
-									<div class="cell-text">
-										{{ event.event }}
-									</div>
-									<div v-if="event.amountbased" class="bottom content">
-										<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-    </div>
+	<v-container class="game">
+		<v-row v-for="eventRow in events" v-if="game" :key="eventRow">
+			<v-col v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done') + ((!event.amountbased && game.status === 1) ? ' clickableField' : '')" @click="!event.amountbased && handleClick(game.gameid, event)" cols="1/5">
+				<div class="wrapper">
+					<div class="cell-text">
+						{{ event.event }}
+					</div>
+					<div v-if="event.amountbased" class="bottom content">
+						<button @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded" :hidden="game.status !== 1">+</button>
+						<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
+						<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1" :hidden="game.status !== 1">-</button>
+					</div>
+				</div>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
-  
+
 <script>
-	import { fetchBingoBoard, fetchBingoGames, updateBingoEvent } from '../services/bingoService.js';
+	import { fetchBingoBoard, fetchBingoGames, updateBingoEvent } from '@/services/bingoService.js';
 
 	export default {
-		name: 'EventList',
+		name: 'BingoBoard',
 		props: {
-			user: String
+			gameId: String,
+			userid: String
 		},
 		data() {
 			return {
-				events: new Map(),
-				points: new Map(),
-				runningGames: [],
-				upcomingGames: [],
-				finishedGames: [],
-				collapsedGames: new Map()
+				events: [],
+				game: null
 			}
 		},
 		methods: {
-			toggleCollapse(gameid) {
-				this.collapsedGames.set(gameid, !this.collapsedGames.get(gameid));
+			async fetchGame() {
+				try {
+					const result = await fetchBingoGames();
+					const data = result.data;
+					this.game = data.find(g => g.gameid === parseInt(this.gameId));
+				} catch (err) {
+					this.game = null;
+				}
 			},
 
-			async fetchBoard(gameid) {
+			async fetchBoard() {
 				try {
-					const result = await fetchBingoBoard(this.user, gameid);
+					const result = await fetchBingoBoard(this.userid, this.gameId);
 					const data = result.data;
 					if (!data || data.length === 0) {
 						throw new Error('No bingo board found');
 					}
-					this.events.set(gameid, []);
-					this.points.set(gameid, 0);
+					this.events = [];
 					for (let i = 0; i < 5; i++) {
-						this.events.get(gameid).push(data.slice(i * 5, i * 5 + 5));
+						this.events.push(data.slice(i * 5, i * 5 + 5));
 					}
 				} catch (err) {
-					this.runningGames = this.runningGames.filter(game => game.gameid !== gameid);
-					this.upcomingGames = this.upcomingGames.filter(game => game.gameid !== gameid);
-					this.finishedGames = this.finishedGames.filter(game => game.gameid !== gameid);
+					this.events = [];
 					return;
 				}
-
-				let bingoCount = 0;
-
-				function isBingo(line) {
-					return line.every(event => event.amounthappened >= event.amountneeded);
-				}
-
-				for (let i = 0; i < 5; i++) {
-					if (isBingo(this.events.get(gameid)[i])) {
-						bingoCount++;
-					}
-
-					let column = [];
-
-					for (let j = 0; j < 5; j++) {
-						if (this.events.get(gameid)[i][j].amounthappened >= this.events.get(gameid)[i][j].amountneeded) {
-							this.points.set(gameid, this.points.get(gameid) + this.events.get(gameid)[i][j].points);
-						}
-						column.push(this.events.get(gameid)[j][i]);
-					}
-
-					if (isBingo(column)) {
-						bingoCount++;
-					}
-				}
-
-				let diagonal1 = [];
-				let diagonal2 = [];
-				for (let i = 0; i < 5; i++) {
-					diagonal1.push(this.events.get(gameid)[i][i]);
-					diagonal2.push(this.events.get(gameid)[i][4 - i]);
-				}
-
-				if (isBingo(diagonal1)) {
-					bingoCount++;
-				}
-
-				if (isBingo(diagonal2)) {
-					bingoCount++;
-				}
-
-				this.points.set(gameid, this.points.get(gameid) + bingoCount * 100);
 			},
 
 			async updateEventOnBoard(gameid, eventid, increase) {
                 try {
                     await updateBingoEvent(eventid, increase);
-					this.fetchBoard(gameid);
+					this.fetchBoard();
                 }catch (err) {
                 }
             },
@@ -172,40 +75,19 @@
 					try {
 						await updateBingoEvent(event.id, false);
 						await updateBingoEvent(event.id, false);
-						this.fetchBoard(gameid);
+						this.fetchBoard();
 					} catch (err) {
 					}
 				}
 			},
-
-			async prepareBingoBoards() {
-				try {
-					const result = await fetchBingoGames();
-					this.games = result.data;
-					for (const game of result.data) {
-						if (game.status === 1) {
-							this.runningGames.push(game);
-						} else if (game.status === 0) {
-							this.upcomingGames.push(game);
-						} else if (game.status === 2) {
-							this.finishedGames.push(game);
-						}
-						this.collapsedGames.set(game.gameid, true);
-						this.events.set(game.gameid, []);
-						this.points.set(game.gameid, 0);
-						this.fetchBoard(game.gameid);
-					}
-				} catch (err) {
-				}
-			}
 		},
-		mounted() {
-			this.prepareBingoBoards();
+		async mounted() {
+			await this.fetchGame();
+			this.fetchBoard();
 		}
 	}
 </script>
-  
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 	table {
 		height: 762px;

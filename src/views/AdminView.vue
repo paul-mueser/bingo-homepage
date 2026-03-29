@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <v-container class="contentWrap">
     <h1>Create and edit games</h1>
     <h1>Create Game</h1>
     <form @submit.prevent="createGame">
@@ -83,11 +83,12 @@
         </div>
       </div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
-  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, createBingoBoard, addParticipant } from '../services/bingoService.js';
+  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, createBingoBoard, addParticipant } from '@/services/bingoService.js';
+
   export default {
     name: 'AdminView',
     data() {
