@@ -1,12 +1,10 @@
 <template>
-  <v-container>
-    <div class="content">
-      <v-btn v-on:click="loginMode = true">Login</v-btn>
-      <v-btn v-on:click="loginMode = false">Register</v-btn>
-    </div>
+  <v-container class="game" style="margin-top: 50px;">
+    <v-btn base-color="primary" v-on:click="loginMode = true" :disabled="loginMode" style="margin-right: 10px;">Login</v-btn>
+    <v-btn base-color="primary" v-on:click="loginMode = false" :disabled="!loginMode">Register</v-btn>
+    <Login v-if="loginMode" style="margin-top: 20px;"></Login>
+    <Register v-else style="margin-top: 20px;"></Register>
   </v-container>
-  <Login v-if="loginMode"></Login>
-  <Register v-else></Register>
 </template>
 
 <script>
@@ -24,6 +22,16 @@ export default {
     return {
       loginMode: true
     }
+  },
+  mounted() {
+    window.addEventListener('register-success', () => {
+      this.loginMode = true;
+    });
+  },
+  beforeUnmount() {
+    window.removeEventListener('register-success', () => {
+      this.loginMode = true;
+    });
   }
 }
 </script>

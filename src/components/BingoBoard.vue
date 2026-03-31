@@ -1,15 +1,15 @@
 <template>
-	<v-container class="game">
-		<v-row v-for="eventRow in events" v-if="game" :key="eventRow">
-			<v-col v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done') + ((!event.amountbased && game.status === 1) ? ' clickableField' : '')" @click="!event.amountbased && handleClick(game.gameid, event)" cols="1/5">
+	<v-container class="game" min-width="762px" min-height="762px" max-width="762px" max-height="762px">
+		<v-row v-for="eventRow in events" v-if="game" :key="eventRow" density="compact" gap="0">
+			<v-col v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done') + ((!event.amountbased && game.status === 1) ? ' clickableField' : '')" @click="game.status === 1 && !event.amountbased && handleClick(game.gameid, event)" cols="1/5">
 				<div class="wrapper">
 					<div class="cell-text">
 						{{ event.event }}
 					</div>
 					<div v-if="event.amountbased" class="bottom content">
-						<button @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded" :hidden="game.status !== 1">+</button>
+						<v-btn @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded" :style="(game.status !== 1) ? 'display:none' : ''" icon="fa-solid fa-circle-plus" density="compact"></v-btn>
 						<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
-						<button @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1" :hidden="game.status !== 1">-</button>
+						<v-btn @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1" :style="(game.status !== 1) ? 'display:none' : ''" icon="fa-solid fa-circle-minus" density="compact"></v-btn>
 					</div>
 				</div>
 			</v-col>
@@ -33,6 +33,10 @@
 			}
 		},
 		methods: {
+			_onEventUpdated(e) {
+				this.fetchBoard();
+			},
+
 			async fetchGame() {
 				try {
 					const result = await fetchBingoGames();
@@ -63,7 +67,7 @@
 			async updateEventOnBoard(gameid, eventid, increase) {
                 try {
                     await updateBingoEvent(eventid, increase);
-					this.fetchBoard();
+					window.dispatchEvent(new CustomEvent('event-updated'));
                 }catch (err) {
                 }
             },
@@ -75,7 +79,7 @@
 					try {
 						await updateBingoEvent(event.id, false);
 						await updateBingoEvent(event.id, false);
-						this.fetchBoard();
+						window.dispatchEvent(new CustomEvent('event-updated'));
 					} catch (err) {
 					}
 				}
@@ -84,16 +88,15 @@
 		async mounted() {
 			await this.fetchGame();
 			this.fetchBoard();
+			window.addEventListener('event-updated', this._onEventUpdated);
+		},
+		beforeUnmount() {
+			window.removeEventListener('event-updated', this._onEventUpdated);
 		}
 	}
 </script>
 
 <style scoped>
-	table {
-		height: 762px;
-		width: 762px;
-	}
-
 	.bingo-field {
 		box-sizing: border-box;
 		width: 150px;
@@ -138,10 +141,7 @@
 		background-color: rgba(255, 255, 255, 0.3);
 	}
 
-	button {
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
+	v-btn {
 	}
 </style>
   

@@ -1,39 +1,68 @@
 <template>
-    <v-container>
-      <h2>Login</h2>
-      <form @submit.prevent="handleLogin">
-        <div>
-          <input v-model="username" type="text" autocomplete="username" placeholder="Username" required />
-        </div>
-        <div>
-          <input v-model="password" type="password" autocomplete="current-password" placeholder="Password" required />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </v-container>
-  </template>
-  
-  <script>
+  <v-sheet>
+    <form @submit.prevent="handleLogin">
+      <v-text-field v-model="username.value.value" :error-messages="username.errorMessage.value" label="Username" autocomplete="username" @keydown.enter="focusNext('password')"></v-text-field>
+      <v-text-field v-model="password.value.value" :error-messages="password.errorMessage.value" ref="passwordRef" label="Password" type="password" autocomplete="current-password" @keydown.enter="handleLogin"></v-text-field>
+      <v-btn @click="handleLogin" base-color="primary" style="margin-right:10px;">Login</v-btn>
+      <v-btn @click="handleReset" base-color="secondary">Clear</v-btn>
+    </form>
+  </v-sheet>
+</template>
+
+<script setup>
+  import { ref } from 'vue';
+  import { useField, useForm } from 'vee-validate';
   import { login } from '@/services/authService';
-  
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-      };
-    },
-    methods: {
-      async handleLogin() {
-        try {
-          await login(this.username, this.password);
-          window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: true } }));
-          this.$router.push('/');
-        } catch (err) {
-          console.error('Login failed');
+  import { useRouter } from 'vue-router';
+
+  const passwordRef = ref(null);
+
+  const router = useRouter();
+
+  const { handleSubmit, handleReset } = useForm({
+    validationSchema: {
+      username: (value) => {
+        if (!value) {
+          return 'Username is required';
         }
+        return true;
+      },
+      password: (value) => {
+        if (!value) {
+          return 'Password is required';
+        }
+        return true;
       },
     },
-  };
-  </script>
+  });
+
+  const username = useField('username');
+  const password = useField('password');
+
+  const handleLogin = handleSubmit(async (values) => {
+    try {
+      await login(values.username, values.password);
+      window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: true } }));
+      router.push('/');
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 404) {
+          username.setErrors(['Invalid username']);
+        } else if (err.response.status === 401) {
+          password.setErrors(['Invalid password']);
+        } else {
+          password.errorMessage.value = 'Login failed';
+        }
+      } else {
+        password.errorMessage.value = 'Login failed';
+      }
+    }
+  });
+
+  function focusNext(refName) {
+    if (refName === 'password') {
+      passwordRef.value?.focus();
+    }
+  }
+</script>
   

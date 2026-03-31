@@ -24,7 +24,10 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if (!$user || !password_verify($password, $user['password_hash'])) {
+if (!$user) {
+    http_response_code(404);
+    echo json_encode(["error" => "User not found"]);
+} else if (!password_verify($password, $user['password_hash'])) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid credentials"]);
 } else {

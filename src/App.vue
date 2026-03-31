@@ -47,8 +47,7 @@
   mounted() {
     this.checkAuth();
     window.addEventListener('auth-changed', this._onAuthChanged);
-  }
-  ,
+  },
   beforeUnmount() {
     window.removeEventListener('auth-changed', this._onAuthChanged);
   },
