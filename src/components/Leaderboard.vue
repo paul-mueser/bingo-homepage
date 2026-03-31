@@ -29,6 +29,10 @@
             }
         },
         methods: {
+            _onEventUpdated() {
+                this.prepareLeaderboard();
+            },
+            
             async prepareLeaderboard() {
                 try {
                     const result = await fetchLeaderboard(this.gameId);
@@ -39,6 +43,10 @@
         },
         mounted() {
             this.prepareLeaderboard();
-        }
+            window.addEventListener('event-updated', this._onEventUpdated);
+        },
+		beforeUnmount() {
+			window.removeEventListener('event-updated', this._onEventUpdated);
+		}
     }
 </script>
