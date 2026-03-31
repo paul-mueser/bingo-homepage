@@ -6,10 +6,15 @@
 					<div class="cell-text">
 						{{ event.event }}
 					</div>
+					<v-divider thickness="3" color="black" opacity="1" gradient></v-divider>
 					<div v-if="event.amountbased" class="bottom content">
 						<v-btn @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded" :style="(game.status !== 1) ? 'display:none' : ''" icon="fa-solid fa-circle-plus" density="compact"></v-btn>
 						<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
 						<v-btn @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1" :style="(game.status !== 1) ? 'display:none' : ''" icon="fa-solid fa-circle-minus" density="compact"></v-btn>
+					</div>
+					<v-divider v-if="event.amountbased" thickness="3" color="black" opacity="1" gradient></v-divider>
+					<div class="bottom content">
+						<span>{{ event.points }} Points</span>
 					</div>
 				</div>
 			</v-col>
@@ -109,6 +114,7 @@
 		display: flex;
   		flex-direction: column;
 		height: 146px;
+		aspect-ratio: 1;
 	}
 
 	.cell-text {

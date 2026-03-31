@@ -34,7 +34,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $gameid = $data['gameid'];
 
 // Fetch user from database
-$stmt = $conn->prepare("SELECT * FROM bingoevent WHERE (EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingoevent.bingogameid) OR ?) AND bingogameid = ? ORDER BY event");
+$stmt = $conn->prepare("SELECT bingoevent.*, bingocategory.points FROM bingoevent LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE (EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = bingoevent.bingogameid) OR ?) AND bingogameid = ? ORDER BY event");
 $stmt->bind_param("iii", $decoded->data->id, $decoded->data->isAdmin, $gameid);
 $stmt->execute();
 $result = $stmt->get_result();

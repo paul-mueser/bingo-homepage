@@ -8,9 +8,9 @@
         <EventList :gameId="this.gameId"/>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col v-for="user in participants" :key="user.userid">
-        <v-btn @click="userid = user.userid">{{ user.username }}</v-btn>
+    <v-row class="justify-center">
+      <v-col v-for="user in participants" :key="user.id" cols="auto">
+        <v-btn @click="userid = user.id" color="primary" :disabled="this.userid === user.id">{{ user.username }}</v-btn>
       </v-col>
     </v-row>
     <v-row>
