@@ -10,6 +10,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import router from './router'
 
 import './assets/sass/style.scss'
+import 'vuetify/styles'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { far } from '@fortawesome/free-regular-svg-icons'
