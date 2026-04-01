@@ -65,8 +65,9 @@
   :root {
     --background-color: rgb(31, 31, 31);
     --background-transparent: rgba(31, 31, 31, 0.911);
-    --text-color: rgb(228, 226, 226);
+    --text-color: rgb(255, 255, 255);
     --text-color-highlight: rgb(0, 162, 255);
+    --text-color-highlight-secondary: rgb(84, 182, 178);
     --element-size: 30px;
   }
 
@@ -146,5 +147,15 @@
 
 	.impossible {
     background-color: black;
+  }
+
+  .v-btn.bg-primary {
+    background-color: var(--text-color-highlight);
+    color: var(--text-color);
+  }
+
+  .v-btn.bg-secondary {
+    background-color: var(--text-color-highlight-secondary);
+    color: var(--text-color);
   }
 </style>
