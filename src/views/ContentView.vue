@@ -1,6 +1,6 @@
 <template>
-  <DesktopContentView v-if="!mobile" :key="this.currentGameId" :gameId="this.currentGameId"/>
-  <MobileContentView v-if="mobile" :key="this.currentGameId" :gameId="this.currentGameId"/>
+  <DesktopContentView v-if="!mobile" :key="currentGameId" :gameId="currentGameId"/>
+  <MobileContentView v-if="mobile" :key="currentGameId" :gameId="currentGameId"/>
 </template>
 
 <script setup>

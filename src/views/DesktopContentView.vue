@@ -2,20 +2,20 @@
   <v-container class="contentWrap">
     <v-row>
       <v-col cols="1/2">
-        <Leaderboard :gameId="this.gameId"/>
+        <Leaderboard :gameId="gameId"/>
       </v-col>
       <v-col cols="1/2">
-        <EventList :gameId="this.gameId"/>
+        <EventList :gameId="gameId"/>
       </v-col>
     </v-row>
     <v-row class="justify-center">
       <v-col v-for="user in participants" :key="user.id" cols="auto">
-        <v-btn @click="userid = user.id" color="primary" :disabled="this.userid === user.id">{{ user.username }}</v-btn>
+        <v-btn @click="userid = user.id" color="primary" :disabled="userid === user.id">{{ user.username }}</v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <BingoBoard :key="userid" :gameId="this.gameId" :userid="this.userid"/>
+        <BingoBoard :key="userid" :gameId="gameId" :userid="userid"/>
       </v-col>
     </v-row>
   </v-container>

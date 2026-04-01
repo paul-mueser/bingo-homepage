@@ -1,9 +1,9 @@
 <template>
   <v-container class="contentWrap">
     <h1>Mobile Content | Game ID: {{ gameId }}</h1>
-    <BingoBoard v-if="value==='showBingoField'" :gameId="this.gameId" :userid="this.userid"/>
-    <EventList v-if="value==='showEvents'" :gameId="this.gameId"/>
-    <Leaderboard v-if="value==='showLeaderboard'" :gameId="this.gameId"/>
+    <BingoBoard v-if="value==='showBingoField'" :gameId="gameId" :userid="userid"/>
+    <EventList v-if="value==='showEvents'" :gameId="gameId"/>
+    <Leaderboard v-if="value==='showLeaderboard'" :gameId="gameId"/>
   </v-container>
   <v-bottom-navigation v-model="value" color="primary" grow mode="shift" mandatory="true">
     <v-btn value="showBingoField">

@@ -1,5 +1,5 @@
 <template>
-    <Games :key="this.currentStatus" :gameStatus="this.currentStatus"/>
+    <Games :key="currentStatus" :gameStatus="currentStatus"/>
 </template>
 
 <script>

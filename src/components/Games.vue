@@ -1,8 +1,8 @@
 <template>
     <v-container class="contentWrap">
-        <h1>{{ this.gameStatus === 'upcoming' ? 'Upcoming Games' : this.gameStatus === 'running' ? 'Running Games' : 'Finished Games' }}</h1>
+        <h1>{{ gameStatus === 'upcoming' ? 'Upcoming Games' : gameStatus === 'running' ? 'Running Games' : 'Finished Games' }}</h1>
         <v-list class="game">
-            <v-list-item v-for="game in this.games" :key="game.gameid" link :to="`/game/${game.gameid}`">
+            <v-list-item v-for="game in games" :key="game.gameid" link :to="`/game/${game.gameid}`">
                 {{ game.name }}
             </v-list-item>
         </v-list>
