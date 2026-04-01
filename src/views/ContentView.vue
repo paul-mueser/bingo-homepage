@@ -7,10 +7,6 @@
 import { useDisplay } from 'vuetify';
 
 const { mobile } = useDisplay();
-
-const props = defineProps({
-  gameId: String
-});
 </script>
 
 <script>
@@ -19,6 +15,9 @@ const props = defineProps({
 
   export default {
     name: 'BingoView',
+    props: {
+      gameId: String
+    },
     components: {
       DesktopContentView,
       MobileContentView
