@@ -37,6 +37,23 @@ const vuetify = createVuetify({
     },
     theme: {
         defaultTheme: 'dark',
+        themes: {
+            dark: {
+                colors: {
+                    background: 'rgb(31, 31, 31)',
+                    surface: 'rgb(33, 33, 33)',
+                    primary: 'rgb(0, 162, 255)',
+                    secondary: 'rgb(84, 182, 178)',
+                    "on-background": 'rgb(255, 255, 255)',
+                    "on-surface": 'rgb(255, 255, 255)',
+                    "on-primary": 'rgb(255, 255, 255)',
+                    "border-color": 'rgb(255, 255, 255)',
+                    "border-opacity": '0.12',
+                    "shadow-color": 'rgb(0, 0, 0)',
+                    "high-emphasis-opacity": '1',
+                }
+            }
+        }
     }
 })
 
