@@ -32,10 +32,12 @@ $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
+    $stmt->close();
     http_response_code(409);
     echo json_encode(["error" => "Username already in use"]);
 } else {
     // Insert user into database
+    $stmt->close();
     $stmt = $conn->prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)");
     $stmt->bind_param("ss", $username, $hashedPassword);
     

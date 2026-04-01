@@ -62,7 +62,7 @@ $stmt->bind_param("ii", $amountHappened, $eventid);
 if($stmt->execute()) {
     $stmt->close();
     // Recalculate the points for the user and update the database
-    $stmt = $conn->prepare("SELECT playerid FROM bingoboards WHERE eventid = ?");  
+    $stmt = $conn->prepare("SELECT DISTINCT playerid FROM bingoboards WHERE eventid = ?");  
     $stmt->bind_param("i", $eventid);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -73,8 +73,8 @@ if($stmt->execute()) {
     $stmt->close();
 
     foreach ($playerids as $playerid) {
-        $stmt = $conn->prepare("SELECT bingoboards.x_row, bingoboards.y_col, bingoevent.amounthappened >= bingoevent.amountneeded AS is_done, bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE bingoboards.playerid = ?");
-        $stmt->bind_param("i", $playerid);
+        $stmt = $conn->prepare("SELECT bingoboards.x_row, bingoboards.y_col, bingoevent.amounthappened >= bingoevent.amountneeded AS is_done, bingocategory.points FROM bingoboards LEFT JOIN bingoevent ON bingoboards.eventid = bingoevent.id LEFT JOIN bingocategory ON bingoevent.bingocategoryid = bingocategory.catagoryid WHERE bingoboards.playerid = ? AND bingoevent.bingogameid = (SELECT bingogameid FROM bingoevent WHERE id = ?)");
+        $stmt->bind_param("ii", $playerid, $eventid);
         $stmt->execute();
         $result = $stmt->get_result();
         
@@ -117,6 +117,14 @@ if($stmt->execute()) {
             if (!$bingoCard[$i][6 - $i]['is_done']) {
                 $diagonal2Done = false;
             }
+        }
+
+        if ($diagonal1Done) {
+            $points += 100;
+        }
+        
+        if ($diagonal2Done) {
+            $points += 100;
         }
 
         // Update the points in the database

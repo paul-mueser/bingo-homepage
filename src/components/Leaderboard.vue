@@ -6,8 +6,8 @@
             <v-col cols="1/5" style="text-align:right">Score</v-col>
         </v-row>
         <v-container class="overflow-y-auto" height="478px">
-            <v-row v-for="player in leaderboard" :key="player.username">
-                <v-col cols="1/5" style="text-align:right">{{ leaderboard.indexOf(player) + 1 }}</v-col>
+            <v-row v-for="(player, index) in leaderboard" :key="player.username">
+                <v-col cols="1/5" style="text-align:right">{{ index + 1 }}</v-col>
                 <v-col cols="3/5" style="text-align:left">{{ player.username }}</v-col>
                 <v-col cols="1/5" style="text-align:right">{{ player.score }}</v-col>
             </v-row>

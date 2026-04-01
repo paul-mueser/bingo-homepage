@@ -32,8 +32,8 @@ if ($conn->connect_error) {
 $data = json_decode(file_get_contents("php://input"), true);
 $gameid = $data['gameid'];
 
-$stmt = $conn->prepare("SELECT users.username, users.id, participants.score FROM participants LEFT JOIN users ON participants.userid = users.id WHERE participants.gameid = ? ORDER BY users.username");
-$stmt->bind_param("i", $gameid);
+$stmt = $conn->prepare("SELECT users.username, users.id, participants.score FROM participants LEFT JOIN users ON participants.userid = users.id WHERE participants.gameid = ? AND (EXISTS (SELECT 1 FROM participants WHERE participants.userid = ? AND participants.gameid = ?) OR ?) ORDER BY users.username");
+$stmt->bind_param("iiii", $gameid, $decoded->data->id, $gameid, $decoded->data->isAdmin);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_all(MYSQLI_ASSOC);

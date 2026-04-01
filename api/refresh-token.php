@@ -42,7 +42,7 @@ try {
     setcookie("token", $jwt, $expire_claim, "/", "", true, true);
 
     http_response_code(200);
-    echo json_encode(["message" => "Token refreshed", "isAdmin" => $decoded->data->isAdmin]);
+    echo json_encode(["message" => "Token refreshed", "data" => $decoded->data, "isAdmin" => $decoded->data->isAdmin]);
 } catch (Exception $e) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid refresh token"]);

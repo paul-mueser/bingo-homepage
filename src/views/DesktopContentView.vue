@@ -15,7 +15,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <BingoBoard :gameId="this.gameId" :userid="this.userid"/>
+        <BingoBoard :key="userid" :gameId="this.gameId" :userid="this.userid"/>
       </v-col>
     </v-row>
   </v-container>

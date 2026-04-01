@@ -51,8 +51,8 @@ const routes = [
       const userStore = useUserStore();
       try {
         const response = await verifyToken();
-        userStore.setUser(response.data);
-        if (response.data.isAdmin) {
+        userStore.setUser(response.data.data);
+        if (response.data.data.isAdmin) {
           next();
         } else {
           window.alert('You must be an admin to access this area.');
@@ -61,8 +61,8 @@ const routes = [
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
-          userStore.setUser(refreshResponse.data);
-          if (refreshResponse.data.isAdmin) {
+          userStore.setUser(refreshResponse.data.data);
+          if (refreshResponse.data.data.isAdmin) {
             next();
           } else {
             window.alert('You must be an admin to access this area.');
@@ -87,7 +87,7 @@ const routes = [
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
-          userStore.setUser(refreshResponse.data);
+          userStore.setUser(refreshResponse.data.data);
           next();
         } catch (refreshError) {
           userStore.clearUser();
@@ -109,7 +109,7 @@ const routes = [
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
-          userStore.setUser(refreshResponse.data);
+          userStore.setUser(refreshResponse.data.data);
           next();
         } catch (refreshError) {
           userStore.clearUser();

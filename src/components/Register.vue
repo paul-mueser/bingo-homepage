@@ -60,7 +60,6 @@
   const handleRegister = handleSubmit(async (values) => {
     try {
       await register(values.username, values.password, values.authCode);
-      window.dispatchEvent(new CustomEvent('auth-changed', { detail: { isAuthenticated: true } }));
       router.push('/login');
       window.dispatchEvent(new CustomEvent('register-success'));
     } catch (err) {

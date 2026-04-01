@@ -23,15 +23,16 @@ export default {
       loginMode: true
     }
   },
-  mounted() {
-    window.addEventListener('register-success', () => {
+  methods: {
+    _onRegisterSuccess() {
       this.loginMode = true;
-    });
+    }
+  },
+  mounted() {
+    window.addEventListener('register-success', this._onRegisterSuccess);
   },
   beforeUnmount() {
-    window.removeEventListener('register-success', () => {
-      this.loginMode = true;
-    });
+    window.removeEventListener('register-success', this._onRegisterSuccess);
   }
 }
 </script>
