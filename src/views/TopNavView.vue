@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer">
       </v-app-bar-nav-icon>
     </template>
-    <v-app-bar-title @click="$router.push('/')" class="title">{{ this.pageTitle }}</v-app-bar-title>
+    <v-app-bar-title @click="$router.push('/')" class="title">Bingo Homepage</v-app-bar-title>
   </v-app-bar>
   <v-navigation-drawer v-model="drawer" temporary>
     <v-list-item link to="/">Home</v-list-item>
@@ -32,11 +32,6 @@ import { useUserStore } from '@/stores/user';
 
 export default {
   name: 'TopNavView',
-  data() {
-    return {
-      pageTitle: 'Bingo Homepage',
-    }
-  },
   methods: {
     async initializeLogout() {
       try {
