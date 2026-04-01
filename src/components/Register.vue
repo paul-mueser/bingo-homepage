@@ -5,8 +5,8 @@
       <v-text-field v-model="password.value.value" :error-messages="password.errorMessage.value" ref="passwordRef" label="Password" type="password" autocomplete="new-password" @keydown.enter="focusNext('confirmPassword')"></v-text-field>
       <v-text-field v-model="confirmPassword.value.value" :error-messages="confirmPassword.errorMessage.value" label="Confirm Password" type="password" autocomplete="new-password" ref="confirmPasswordRef" @keydown.enter="focusNext('authCode')"></v-text-field>
       <v-text-field v-model="authCode.value.value" :error-messages="authCode.errorMessage.value" label="Authentication Code" autocomplete="off" ref="authCodeRef" @keydown.enter="handleRegister"></v-text-field>
-      <v-btn @click="handleRegister" base-color="primary" variant="flat" style="margin-right:10px;">Register</v-btn>
-      <v-btn @click="handleReset" base-color="secondary" variant="flat">Clear</v-btn>
+      <v-btn @click="handleRegister" style="margin-right:10px;" class="bg-primary">Register</v-btn>
+      <v-btn @click="handleReset" class="bg-secondary">Clear</v-btn>
     </form>
   </v-sheet>
 </template>

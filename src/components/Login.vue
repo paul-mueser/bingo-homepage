@@ -3,8 +3,8 @@
     <form @submit.prevent="handleLogin">
       <v-text-field v-model="username.value.value" :error-messages="username.errorMessage.value" label="Username" autocomplete="username" @keydown.enter="focusNext('password')"></v-text-field>
       <v-text-field v-model="password.value.value" :error-messages="password.errorMessage.value" ref="passwordRef" label="Password" type="password" autocomplete="current-password" @keydown.enter="handleLogin"></v-text-field>
-      <v-btn @click="handleLogin" base-color="primary" variant="flat" style="margin-right:10px;">Login</v-btn>
-      <v-btn @click="handleReset" base-color="secondary" variant="flat">Clear</v-btn>
+      <v-btn @click="handleLogin" class="bg-primary" style="margin-right:10px;">Login</v-btn>
+      <v-btn @click="handleReset" class="bg-secondary">Clear</v-btn>
     </form>
   </v-sheet>
 </template>
