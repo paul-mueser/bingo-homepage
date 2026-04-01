@@ -10,7 +10,7 @@
     </v-row>
     <v-row class="justify-center">
       <v-col v-for="user in participants" :key="user.id" cols="auto">
-        <v-btn @click="userid = user.id" color="primary" :disabled="userid === user.id">{{ user.username }}</v-btn>
+        <v-btn @click="userid = user.id" color="primary" variant="elevated" :disabled="userid === user.id">{{ user.username }}</v-btn>
       </v-col>
     </v-row>
     <v-row>
