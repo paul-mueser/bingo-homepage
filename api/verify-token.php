@@ -18,10 +18,10 @@ try {
     $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
     if ($decoded->data->isAdmin === 1) {
         http_response_code(200);
-        echo json_encode(["message" => "Token is valid", "isAdmin" => true]);
+        echo json_encode(["message" => "Token is valid", "data" => $decoded->data, "isAdmin" => true]);
     } else {
         http_response_code(200);
-        echo json_encode(["message" => "Token is valid", "isAdmin" => false]);
+        echo json_encode(["message" => "Token is valid", "data" => $decoded->data, "isAdmin" => false]);
     }
 } catch (Exception $e) {
     http_response_code(401);

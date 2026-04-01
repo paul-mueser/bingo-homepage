@@ -1,148 +1,102 @@
 <template>
-    <div class="container">
-        <h1>Events</h1>
-		<h1>Running Games</h1>
-        <div v-for="game in runningGames" :key="game.gameid" class="game">
-            <h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }}</h2>
-            <div v-show="!collapsedGames.get(game.gameid)">
-                <table>
-                    <thead>
-                        <tr>
-                        <th>Event Name</th>
-                        <th>Happened/Needed</th>
-                        <th>Done?</th>
-                        <th>Update</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="event in events.get(game.gameid)" :key="event.id">
-                        <td>{{ event.event }}</td>
-                        <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
-                        <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
-                        <td class="content">
-                            <button @click="updateEventInList(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded">+</button>
-                            <button @click="updateEventInList(event.id, false)" :disabled="event.amounthappened <= -1">-</button>
-                        </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <h1>Upcoming Games</h1>
-        <div v-for="game in upcomingGames" :key="game.gameid" class="game">
-            <h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }}</h2>
-            <div v-show="!collapsedGames.get(game.gameid)">
-                <table>
-                    <thead>
-                        <tr>
-                        <th>Event Name</th>
-                        <th>Happened/Needed</th>
-                        <th>Done?</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="event in events.get(game.gameid)" :key="event.id">
-                        <td>{{ event.event }}</td>
-                        <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
-                        <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <h1>Finished Games</h1>
-        <div v-for="game in finishedGames" :key="game.gameid" class="game">
-            <h2 @click="toggleCollapse(game.gameid)" class="game-title"><span class="caret">{{ collapsedGames.get(game.gameid) ? '▸' : '▾' }}</span> {{ game.name }}</h2>
-            <div v-show="!collapsedGames.get(game.gameid)">
-                <table>
-                    <thead>
-                        <tr>
-                        <th>Event Name</th>
-                        <th>Happened/Needed</th>
-                        <th>Done?</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="event in events.get(game.gameid)" :key="event.id">
-                        <td>{{ event.event }}</td>
-                        <td align="center">{{ !event.amountbased ? (event.amounthappened >= event.amountneeded) : event.amounthappened + '/' + event.amountneeded }}</td>
-                        <td :class="event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done'"> </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <v-container class="game">
+        <v-text-field v-model="search" label="Search Event" prepend-inner-icon="fa-solid fa-search"/>
+        <v-row :gap="mobile ? 0 : 24">
+            <v-col cols="4/6">Event Name</v-col>
+            <v-col cols="1/6">Points</v-col>
+            <v-col cols="1/6"></v-col>
+        </v-row>
+        <v-container class="overflow-y-auto" height="400px">
+            <v-row v-for="event in filteredEvents" :key="event.id" :class="(event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')" style="margin-top: 5px; margin-bottom: 5px; min-height: 32px;" align="center" :gap="mobile ? 0 : 24">
+                <v-col :cols="event.amountbased ? colVals.eventTextSmall : colVals.eventTextLarge">{{ event.event }}</v-col>
+                <v-col v-if="event.amountbased" :cols="colVals.medium">({{ event.amounthappened }} / {{ event.amountneeded }})</v-col>
+                <v-col v-else :cols="colVals.small"></v-col>
+                <v-col :cols="colVals.small">{{ event.points }}P</v-col>
+                <v-col v-if="event.amountbased" :hidden="game.status !== 1" :cols="colVals.buttons" style="margin-top: 5px; margin-bottom: 5px;">
+                    <v-btn @click="updateEventInList(event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded" density="compact" icon="fa-solid fa-circle-plus"></v-btn>
+                    <v-btn @click="updateEventInList(event.id, false)" :disabled="event.amounthappened <= 0" density="compact" icon="fa-solid fa-circle-minus"></v-btn>
+                </v-col>
+                <v-col v-else :hidden="game.status !== 1" :cols="colVals.buttons">
+                    <v-switch :key="event.id" :model-value="event.amounthappened === event.amountneeded" @update:modelValue="val => updateEventInList(event.id, val)" inset></v-switch>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-container>
 </template>
 
+<script setup>
+    import { useDisplay } from 'vuetify';
+    const { mobile } = useDisplay();
+    const colVals =  { eventTextLarge: '6/10', eventTextSmall: '5/10', medium: '2/10', small: '1/10', buttons: '2/10' };
+</script>
+
 <script>
-    import { fetchBingoEvents, fetchBingoGames, updateBingoEvent } from '../services/bingoService.js';
+    import { fetchBingoEvents, fetchBingoGames, updateBingoEvent } from '@/services/bingoService.js';
+    import Fuse from 'fuse.js';
 
     export default {
         name: 'EventList',
+        props: {
+            gameId: String
+        },
         data() {
             return {
-				runningGames: [],
-				upcomingGames: [],
-				finishedGames: [],
-                games: [],
-                events: new Map(),
-                collapsedGames: new Map()
+				events: [],
+                game: null,
+                fuse: null,
+                search: '',
             }
         },
         methods: {
-            toggleCollapse(gameid) {
-				this.collapsedGames.set(gameid, !this.collapsedGames.get(gameid));
+            _onEventUpdated(e) {
+                this.fetchEvents();
+            },
+
+            async fetchGame() {
+				try {
+					const result = await fetchBingoGames();
+					const data = result.data;
+					this.game = data.find(g => g.gameid === parseInt(this.gameId));
+				} catch (err) {
+					this.game = null;
+				}
 			},
-            async fetchAllEvents() {
-                for (const game of this.games) {
-                    try {
-                        const result = await fetchBingoEvents(game.gameid);
-                        this.events.set(game.gameid, result.data);
-                    } catch (err) {
-                    }
+
+            async fetchEvents() {
+                try {
+                    const result = await fetchBingoEvents(this.gameId);
+                    this.events = result.data;
+                    this.fuse = new Fuse(this.events, {
+                        keys: ['event'],
+                        threshold: 0.3
+                    });
+                } catch (err) {
+                    this.events = [];
                 }
             },
 
             async updateEventInList(id, increase) {
                 try {
                     await updateBingoEvent(id, increase);
-                    this.fetchAllEvents();
+                    window.dispatchEvent(new CustomEvent('event-updated'));
                 }catch (err) {
                 }
             },
-
-            async prepareBingoEvents() {
-                try {
-                    const result = await fetchBingoGames();
-                    this.games = result.data;
-                    for (const game of this.games) {
-                        if (game.status === 1) {
-							this.runningGames.push(game);
-						} else if (game.status === 0) {
-							this.upcomingGames.push(game);
-						} else if (game.status === 2) {
-							this.finishedGames.push(game);
-						}
-                        this.collapsedGames.set(game.gameid, true);
-                    }
-                    this.fetchAllEvents();
-                } catch (err) {
-                }
-            }
         },
-        mounted() {
-            this.prepareBingoEvents();
+        async mounted() {
+            await this.fetchGame();
+            this.fetchEvents();
+            window.addEventListener('event-updated', this._onEventUpdated);
+        },
+        beforeUnmount() {
+            window.removeEventListener('event-updated', this._onEventUpdated);
+        },
+        computed: {
+            filteredEvents() {
+                if (!this.search) return this.events;
+                if (!this.fuse) return this.events;
+                return this.fuse.search(this.search).map(result => result.item);
+            }
         }
     }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-    button {
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-	}
-</style>
-  

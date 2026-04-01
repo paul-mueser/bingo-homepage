@@ -1,37 +1,58 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { verifyToken, refreshToken } from '../services/authService.js';
-import Login from '../components/Login.vue';
-import Register from '../components/Register.vue';
-import BingoView from '../views/BingoView.vue';
-import AdminView from '../views/AdminView.vue';
+import { verifyToken, refreshToken, logout } from '@/services/authService.js';
+import AuthenticationView from '@/views/AuthenticationView.vue';
+import HomeView from '@/views/HomeView.vue';
+import AdminView from '@/views/AdminView.vue';
+import ContentView from '@/views/ContentView.vue';
+import GamesView from '@/views/GamesView.vue';
+import { useUserStore } from '@/stores/user.js';
 
 const routes = [
-  { path: '/login', component: Login },
-  { path: '/register', component: Register },
+  { 
+    name: 'Login',
+    path: '/login',
+    component: AuthenticationView,
+    beforeEnter: async (to, from, next) => {
+      const userStore = useUserStore();
+      try {
+        await logout();
+      } catch (e) {
+      }
+      userStore.clearUser();
+      next();
+    }
+  },
   {
     path: '/',
-    component: BingoView,
+    component: HomeView,
     beforeEnter: async (to, from, next) => {
+      const userStore = useUserStore();
       try {
-        await verifyToken();
+        const response = await verifyToken();
+        userStore.setUser(response.data.data);
         next();
       } catch (error) {
         try {
-          await refreshToken();
+          const response = await refreshToken();
+          userStore.setUser(response.data.data);
           next();
         } catch (refreshError) {
+          userStore.clearUser();
           next('/login');
         }
       }
     },
+    props: true,
   },
   { 
     path: '/admin',
     component: AdminView,
     beforeEnter: async (to, from, next) => {
+      const userStore = useUserStore();
       try {
         const response = await verifyToken();
-        if (response.data.isAdmin) {
+        userStore.setUser(response.data.data);
+        if (response.data.data.isAdmin) {
           next();
         } else {
           window.alert('You must be an admin to access this area.');
@@ -40,18 +61,64 @@ const routes = [
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
-          if (refreshResponse.data.isAdmin) {
+          userStore.setUser(refreshResponse.data.data);
+          if (refreshResponse.data.data.isAdmin) {
             next();
           } else {
             window.alert('You must be an admin to access this area.');
             next('/');
           }
         } catch (refreshError) {
+          userStore.clearUser();
           next('/login');
         }
       }
     },
   },
+  {
+    path: '/game/:gameId',
+    component: ContentView,
+    beforeEnter: async (to, from, next) => {
+      const userStore = useUserStore();
+      try {
+        const response = await verifyToken();
+        userStore.setUser(response.data.data);
+        next();
+      } catch (error) {
+        try {
+          const refreshResponse = await refreshToken();
+          userStore.setUser(refreshResponse.data.data);
+          next();
+        } catch (refreshError) {
+          userStore.clearUser();
+          next('/login');
+        }
+      }
+    },
+    props: true,
+  },
+  {
+    path: '/games/:gameStatus',
+    component: GamesView,
+    beforeEnter: async (to, from, next) => {
+      const userStore = useUserStore();
+      try {
+        const response = await verifyToken();
+        userStore.setUser(response.data.data);
+        next();
+      } catch (error) {
+        try {
+          const refreshResponse = await refreshToken();
+          userStore.setUser(refreshResponse.data.data);
+          next();
+        } catch (refreshError) {
+          userStore.clearUser();
+          next('/login');
+        }
+      }
+    },
+    props: true,
+  }
 ];
 
 const router = createRouter({

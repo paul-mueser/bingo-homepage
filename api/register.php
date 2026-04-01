@@ -26,16 +26,28 @@ if ($authCode !== $CORRECT_AUTH_CODE) {
 // Hash the password
 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-// Insert user into database
-$stmt = $conn->prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)");
-$stmt->bind_param("ss", $username, $hashedPassword);
+$stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$stmt->store_result();
 
-if ($stmt->execute()) {
-    http_response_code(201);
-    echo json_encode(["message" => "User registered"]);
-} else {
+if ($stmt->num_rows > 0) {
+    $stmt->close();
     http_response_code(409);
     echo json_encode(["error" => "Username already in use"]);
+} else {
+    // Insert user into database
+    $stmt->close();
+    $stmt = $conn->prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)");
+    $stmt->bind_param("ss", $username, $hashedPassword);
+    
+    if ($stmt->execute()) {
+        http_response_code(201);
+        echo json_encode(["message" => "User registered"]);
+    } else {
+        http_response_code(400);
+        echo json_encode(["error" => "Failed to register user"]);
+    }
 }
 
 $stmt->close();
