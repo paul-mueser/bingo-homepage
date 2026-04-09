@@ -66,14 +66,17 @@
 <style scoped>
     .first-place {
         background-color: gold;
+        color: var(--background-color);
     }
 
     .second-place {
         background-color: silver;
+        color: var(--background-color);
     }
 
     .third-place {
         background-color: #cd7f32;
+        color: var(--background-color);
     }
 
     .leaderboard-row {
