@@ -10,9 +10,9 @@
     <v-list-item link to="/">Home</v-list-item>
     <v-divider class="mb-8"></v-divider>
     <v-divider class="mt-8"></v-divider>
-    <v-list-item link to="/games/upcoming">Upcoming Games</v-list-item>
     <v-list-item link to="/games/running">Running Games</v-list-item>
     <v-list-item link to="/games/finished">Finished Games</v-list-item>
+    <v-list-item link to="/games/upcoming">Upcoming Games</v-list-item>
     <v-divider class="mb-8"></v-divider>
     <v-divider class="mt-8"></v-divider>
     <v-list-item link to="/admin">Admin</v-list-item>

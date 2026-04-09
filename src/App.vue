@@ -1,10 +1,8 @@
 <template>
-  <v-app>
+  <v-app :style="{background: $vuetify.theme.themes[theme].background}">
     <TopNavView v-if="this.isAuthenticated" :key="this.isAuthenticated"></TopNavView>
-    <div class="background">
-      <div ref="body">
-        <router-view/>
-      </div>
+    <div ref="body">
+      <router-view/>
     </div>
   </v-app>
 </template>
@@ -21,6 +19,11 @@
   },
   components: {
     TopNavView
+  },
+  computed: {
+    theme() {
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light';
+    }
   },
   methods: {
       _onAuthChanged(e) {
@@ -82,29 +85,8 @@
     font-family: 'Roboto';
   }
 
-  .background {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--background-color);
-    transition: background-color .8s ease, color .8s ease;
-  }
-
   .contentWrap {
     margin-top: 80px;
-    margin-bottom: 80px;
-  }
-
-  .container {
-    box-sizing: border-box;
-    z-index: auto;
-    display: flex;
-    flex-direction: column;
-    line-height: 24px;
-    margin-left: 120px;
-    margin-right: 120px;
-    padding-left: 10px;
-    padding-right: 10px;
   }
 
   .content {
@@ -157,5 +139,9 @@
   .v-btn.bg-secondary {
     background-color: var(--text-color-highlight-secondary);
     color: var(--text-color);
+  }
+
+  .v-divider.black {
+    color: var(--background-color);
   }
 </style>

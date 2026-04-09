@@ -52,3 +52,9 @@ const value = ref('showBingoField');
     }
   }
 </script>
+
+<style scoped>
+  .contentWrap {
+    margin-bottom: 56px;
+  }
+</style>

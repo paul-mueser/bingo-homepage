@@ -1,18 +1,18 @@
 <template>
-	<v-container class="game" min-width="762px" min-height="762px" max-width="762px" max-height="762px">
+	<v-container class="game" :style="boardStyle">
 		<v-row v-for="eventRow in events" v-if="game" :key="eventRow" density="compact" gap="0">
 			<v-col v-for="event in eventRow" :key="event.id" :class="'bingo-field ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done') + ((!event.amountbased && game.status === 1) ? ' clickableField' : '')" @click="game.status === 1 && !event.amountbased && handleClick(game.gameid, event)" cols="1/5">
 				<div class="wrapper">
 					<div class="cell-text">
 						{{ event.event }}
 					</div>
-					<v-divider thickness="3" color="black" opacity="1" gradient></v-divider>
+					<v-divider thickness="3" class="black" opacity="1" gradient></v-divider>
 					<div v-if="event.amountbased" class="bottom content">
 						<v-btn @click="updateEventOnBoard(game.gameid, event.id, true)" :disabled="!event.amountbased && event.amounthappened >= event.amountneeded" :style="(game.status !== 1) ? 'display:none' : ''" icon="fa-solid fa-circle-plus" density="compact"></v-btn>
 						<span>({{ event.amounthappened }} / {{ event.amountneeded }})</span>
 						<v-btn @click="updateEventOnBoard(game.gameid, event.id, false)" :disabled="event.amounthappened <= -1" :style="(game.status !== 1) ? 'display:none' : ''" icon="fa-solid fa-circle-minus" density="compact"></v-btn>
 					</div>
-					<v-divider v-if="event.amountbased" thickness="3" color="black" opacity="1" gradient></v-divider>
+					<v-divider v-if="event.amountbased" thickness="3" class="black" opacity="1" gradient></v-divider>
 					<div class="bottom content">
 						<span>{{ event.points }} Points</span>
 					</div>
@@ -97,16 +97,41 @@
 		},
 		beforeUnmount() {
 			window.removeEventListener('event-updated', this._onEventUpdated);
+		},
+		computed: {
+			boardScale() {
+				if (!this.$vuetify.display.mobile) return 1;
+
+				const baseSize = 830;
+				const screenWidth = window.innerWidth;
+
+				return Math.min(1, screenWidth / baseSize);
+			},
+
+			boardStyle() {
+				return {
+					width: '762px',
+					height: '762px',
+					transform: `scale(${this.boardScale})`,
+					transformOrigin: 'top left'
+				}
+			}
 		}
 	}
 </script>
 
 <style scoped>
+	.board-content {
+		width: 762px;
+		height: 762px;
+	}
+
 	.bingo-field {
 		box-sizing: border-box;
 		width: 150px;
 		height: 150px;
-		border: 1px solid black;
+		border: 1px solid var(--text-color);
+		border-radius: 4px;
 		vertical-align: middle;
 	}
 
@@ -122,6 +147,8 @@
 		text-align: left;
 		max-height: 146px;
 		max-width: 150px;
+		padding-left: 0.5em;
+		padding-right: 0.5em;
 	}
 
 	.bottom {

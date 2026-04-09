@@ -6,8 +6,8 @@
             <v-col cols="1/6">Points</v-col>
             <v-col cols="1/6"></v-col>
         </v-row>
-        <v-container class="overflow-y-auto" height="400px">
-            <v-row v-for="event in filteredEvents" :key="event.id" :class="(event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')" style="margin-top: 5px; margin-bottom: 5px; min-height: 32px;" align="center" :gap="mobile ? 0 : 24">
+        <v-container class="overflow-y-auto" height="400px" style="padding: 0">
+            <v-row v-for="event in filteredEvents" :key="event.id" :class="'eventRow ' + (event.amounthappened < event.amountneeded ? (event.amounthappened < 0 ? 'impossible' : 'not-done') : 'done')" style="margin-top: 5px; margin-bottom: 5px; min-height: 32px;" align="center" :gap="mobile ? 0 : 24">
                 <v-col :cols="event.amountbased ? colVals.eventTextSmall : colVals.eventTextLarge">{{ event.event }}</v-col>
                 <v-col v-if="event.amountbased" :cols="colVals.medium">({{ event.amounthappened }} / {{ event.amountneeded }})</v-col>
                 <v-col v-else :cols="colVals.small"></v-col>
@@ -100,3 +100,12 @@
         }
     }
 </script>
+
+<style scoped>
+    .eventRow {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        border: 1px solid var(--text-color);
+        border-radius: 4px;
+    }
+</style>
