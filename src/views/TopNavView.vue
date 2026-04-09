@@ -8,13 +8,13 @@
   </v-app-bar>
   <v-navigation-drawer v-model="drawer" temporary>
     <v-list-item link to="/">Home</v-list-item>
-    <v-divider class="mb-8"></v-divider>
-    <v-divider class="mt-8"></v-divider>
+    <v-divider class="bottom"></v-divider>
+    <v-divider class="top"></v-divider>
     <v-list-item link to="/games/running">Running Games</v-list-item>
     <v-list-item link to="/games/finished">Finished Games</v-list-item>
     <v-list-item link to="/games/upcoming">Upcoming Games</v-list-item>
-    <v-divider class="mb-8"></v-divider>
-    <v-divider class="mt-8"></v-divider>
+    <v-divider class="bottom"></v-divider>
+    <v-divider class="top"></v-divider>
     <v-list-item link to="/admin">Admin</v-list-item>
     <v-list-item @click="initializeLogout">Logout</v-list-item>
   </v-navigation-drawer>
@@ -60,5 +60,13 @@ export default {
 
 .title:hover {
   color: var(--text-color-highlight);
+}
+
+.v-divider.top {
+  margin-top: 32px;
+}
+
+.v-divider.bottom {
+  margin-bottom: 32px;
 }
 </style>
