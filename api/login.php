@@ -37,7 +37,7 @@ if (!$user) {
     $issuedat_claim = time(); // issued at
     $notbefore_claim = $issuedat_claim; // not before in seconds
     $expire_claim = $issuedat_claim + 3600; // expire time in seconds
-    $refresh_expire_claim = $issuedat_claim + 86400; // refresh token expire time in seconds
+    $refresh_expire_claim = $issuedat_claim + 2592000; // refresh token expire time in seconds
 
     $token = array(
         "iss" => $issuer_claim,
