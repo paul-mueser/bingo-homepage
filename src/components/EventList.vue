@@ -68,7 +68,8 @@
                     this.events = result.data;
                     this.fuse = new Fuse(this.events, {
                         keys: ['event'],
-                        threshold: 0.3
+                        threshold: 0.3,
+                        ignoreLocation: true
                     });
                 } catch (err) {
                     this.events = [];
