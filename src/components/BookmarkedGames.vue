@@ -3,12 +3,12 @@
         <v-list class="game">
             <v-list-item v-for="game in games" :key="game.gameid">
                 <v-row align="center">
-                    <v-col cols="9/10">
+                    <v-col cols="7/8">
                         <v-card link :to="`/game/${game.gameid}`" height="50px" style="padding-top: 13px">
                             {{ game.name }}
                         </v-card>
                     </v-col>
-                    <v-col cols="1/10">
+                    <v-col cols="1/8">
                         <v-btn icon="fa-solid fa-bookmark" @click="removeBookmark(game.gameid)"></v-btn>
                     </v-col>
                 </v-row>
