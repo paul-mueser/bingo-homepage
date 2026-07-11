@@ -10,6 +10,11 @@ export const fetchBingoGames = async () => {
     return result.data;
 }
 
+export const fetchBookmarkedGames = async () => {
+    const result = await axios.get(`/api/fetch-bookmarked-games`, { withCredentials: true });
+    return result.data;
+}
+
 export const fetchBingoEvents = async (gameid) => {
     const result = await axios.query(`/api/fetch-bingo-events`, { gameid }, { withCredentials: true });
     return result.data;
@@ -28,6 +33,10 @@ export const fetchLeaderboard = async (gameid) => {
 export const fetchParticipants = async (gameid) => {
     const result = await axios.query(`/api/fetch-participants`, { gameid }, { withCredentials: true });
     return result.data;
+}
+
+export const updateBookmark = async (gameid, newStatus) => {
+    return await axios.post(`/api/update-bookmark`, { gameid, newStatus }, { withCredentials: true });
 }
 
 export const updateBingoEvent = async (eventid, increase) => {
