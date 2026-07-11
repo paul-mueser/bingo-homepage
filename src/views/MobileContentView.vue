@@ -1,12 +1,12 @@
 <template>
   <v-container class="contentWrap">
     <h1>Mobile Content | Game ID: {{ gameId }}</h1>
-    <v-row v-if="value==='showBingoField'" class="justify-center mb-4">
+    <v-row v-if="value==='showBingoField'" class="justify-center mb-4 ml-1 mr-1">
       <v-col v-for="user in participants" :key="user.id" cols="auto">
         <v-btn @click="userid = user.id" class="bg-primary" :disabled="userid === user.id">{{ user.username }}</v-btn>
       </v-col>
     </v-row>
-    <BingoBoard v-if="value==='showBingoField'" :gameId="gameId" :userid="userid"/>
+    <BingoBoard :key="userid" v-if="value==='showBingoField'" :gameId="gameId" :userid="userid"/>
     <EventList v-if="value==='showEvents'" :gameId="gameId"/>
     <Leaderboard v-if="value==='showLeaderboard'" :gameId="gameId"/>
   </v-container>
