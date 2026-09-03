@@ -15,8 +15,8 @@
         <v-container class="overflow-y-auto" height="400px" style="padding: 0">
             <v-row v-for="event in filteredEvents" :key="event.id" :class="'eventRow'" style="margin-top: 5px; margin-bottom: 5px; min-height: 32px;" align="center" :gap="mobile ? 0 : 24">
                 <v-col :cols="colVals.eventTextLarge">{{ event.event }}</v-col>
-                <v-col v-if="event.amountbased" :cols="colVals.small"><font-awesome-icon icon="fa-solid fa-x"/></v-col>
-                <v-col v-else :cols="colVals.small"><font-awesome-icon icon="fa-solid fa-check"/></v-col>
+                <v-col v-if="event.amountbased" :cols="colVals.small"><font-awesome-icon icon="fa-solid fa-check"/></v-col>
+                <v-col v-else :cols="colVals.small"><font-awesome-icon icon="fa-solid fa-x"/></v-col>
             </v-row>
         </v-container>
     </v-container>
