@@ -60,13 +60,8 @@ export const createBingoEvents = async (events) => {
         });
 }
 
-export const createBingoBoard = async (boardData) => {
-    return await axios.post(`/api/create-bingo-board`, boardData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-            withCredentials: true
-        });
+export const createBingoBoard = async (gameid, playerid) => {
+    return await axios.post(`/api/create-bingo-board`, {gameid, playerid}, { withCredentials: true });
 }
 
 export const addParticipant = async (gameid, userid) => {

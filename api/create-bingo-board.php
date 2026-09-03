@@ -1,6 +1,7 @@
 <?php
-header("Content-Type: multipart/form-data");
+header("Content-Type: application/json");
 include 'secrets.php';
+include 'bingo-board-generator.php';
 
 require './vendor/autoload.php';
 use \Firebase\JWT\JWT;
@@ -34,27 +35,10 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
 }
 
-$gameid = isset($_POST['gameid']) ? intval($_POST['gameid']) : -1;
+$data = json_decode(file_get_contents("php://input"), true);
 
-if ($gameid <= 0) {
-    http_response_code(400);
-    echo json_encode(["error" => "Invalid game ID"]);
-    exit();
-}
-
-$playerid = isset($_POST['playerid']) ? intval($_POST['playerid']) : -1;
-
-if ($playerid <= 0) {
-    http_response_code(400);
-    echo json_encode(["error" => "Invalid player ID"]);
-    exit();
-}
-
-if (!isset($_FILES['files']) || $_FILES['files']['error'] !== UPLOAD_ERR_OK) {
-    http_response_code(400);
-    echo json_encode(["error" => "No events file uploaded"]);
-    exit();
-}
+$gameid = $data['gameid'];
+$playerid = $data['playerid'];
 
 $stmt = $conn->prepare("SELECT * FROM bingogame WHERE gameid = ?");
 $stmt->bind_param("i", $gameid);
@@ -66,34 +50,37 @@ $stmt->close();
 if (count($data) === 0) {
     http_response_code(409);
     echo json_encode(["error" => "Game does not exist"]);
+    $conn->close();
     exit();
 }
 
-$handle = fopen($_FILES['files']['tmp_name'], 'r');
-if ($handle === false) {
+$bingoBoard = generateBingoBoard($gameid);
+
+if ($bingoBoard === null) {
     http_response_code(500);
-    echo json_encode(["error" => "Failed to open uploaded file"]);
+    echo json_encode(["error" => "Bingo board generation failed"]);
+    $conn->close();
     exit();
 }
 
-while (($row = fgetcsv($handle)) !== false) {
-    $x_row = $row[0];
-    $y_col = $row[1];
-    $eventid = $row[2];
+for ($i = 0; $i < 5; $i++) {
+    for ($j = 0; $j < 5; $j++) {
+        $x_row = $i;
+        $y_col = $j;
+        $eventid = $bingoBoard[$i][$j];
 
-    $stmt = $conn->prepare("INSERT INTO `bingoboards` (`playerid`, `x_row`, `y_col`, `eventid`, `bingogameid`) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("iiiii", $playerid, $x_row, $y_col, $eventid, $gameid);
-    $stmt->execute();
-    $stmt->close();
+        $stmt = $conn->prepare("INSERT INTO `bingoboards` (`playerid`, `x_row`, `y_col`, `eventid`, `bingogameid`) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("iiiii", $playerid, $x_row, $y_col, $eventid, $gameid);
+        $stmt->execute();
+        $stmt->close();
+    }
 }
 
 http_response_code(200);
 echo json_encode([
     'status' => 'success',
-    'message' => 'Board uploaded successfully'
+    'message' => 'Board successfully created'
 ]);
-
-fclose($handle);
 
 $conn->close();
 ?>

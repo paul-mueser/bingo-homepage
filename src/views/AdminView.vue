@@ -24,15 +24,14 @@
         <p>Number of events: {{ events.get(game.gameid) ? events.get(game.gameid).length : 0 }}</p>
         <button type="submit" @click="stopGame(game.gameid)">Stop Game</button>
         <div>
-          <label>Upload Bingo Board (CSV):</label>
+          <label>Create Bingo Board:</label>
           <select v-model="selectedPlayer">
             <option disabled value="">Please select a Player</option>
             <option v-for="p in players" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
-          <input :ref="'bingoBoardUpload' + game.gameid" id="bingo-board-upload" type="file" accept=".csv"/>
-          <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
+          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
         </div>
         <div>
           <label>Add participant:</label>
@@ -61,15 +60,14 @@
           <button type="submit" @click="uploadEvents(game.gameid)">Upload Events</button>
         </div>
         <div>
-          <label>Upload Bingo Board (CSV):</label>
+          <label>Create Bingo Board:</label>
           <select v-model="selectedPlayer">
             <option disabled value="">Please select a Player</option>
             <option v-for="p in players" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
-          <input :ref="'bingoBoardUpload' + game.gameid" id="bingo-board-upload" type="file" accept=".csv"/>
-          <button type="submit" @click="uploadBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
+          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
         </div>
         <div>
           <label>Add participant:</label>
@@ -226,27 +224,14 @@
         }
       },
 
-      async uploadBingoBoard(gameid) {
-        const input = this.$refs['bingoBoardUpload' + gameid][0];
-        if (!input || !input.files || input.files.length !== 1) return;
-
-        const file = input.files[0];
-        if (!file) return;
-
+      async createBingoBoard(gameid) {
         if (!this.selectedPlayer) {
           //TODO maybe show error to select player in the select box
           return;
         }
 
-        const formData = new FormData();
-        formData.append('files', file);
-        formData.append('gameid', gameid);
-        formData.append('playerid', this.selectedPlayer);
-
-        console.log('Uploading bingo board: ', formData);
-
         try {
-          await createBingoBoard(formData);
+          await createBingoBoard(gameid, this.selectedPlayer);
           this.selectedPlayer = '';
           await this.prepareAdminPage();
           await this.toggleCollapse(gameid);
