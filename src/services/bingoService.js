@@ -35,6 +35,11 @@ export const fetchParticipants = async (gameid) => {
     return result.data;
 }
 
+export const fetchEventSubmissions = async () => {
+    const result = await axios.get(`/api/fetch-event-submissions`, { withCredentials: true });
+    return result.data;
+}
+
 export const updateBookmark = async (gameid, newStatus) => {
     return await axios.post(`/api/update-bookmark`, { gameid, newStatus }, { withCredentials: true });
 }
@@ -66,4 +71,8 @@ export const createBingoBoard = async (gameid, playerid) => {
 
 export const addParticipant = async (gameid, userid) => {
     return await axios.post(`/api/add-participant`, { gameid, userid }, { withCredentials: true });
+}
+
+export const addEventSubmission = async (event, amountBased) => {
+    return await axios.post(`/api/add-event-submission`, { event, amountBased }, { withCredentials: true });
 }
