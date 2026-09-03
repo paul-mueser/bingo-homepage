@@ -27,7 +27,7 @@
           <label>Create Bingo Board:</label>
           <select v-model="selectedPlayer">
             <option disabled value="">Please select a Player</option>
-            <option v-for="p in players" :key="p.id" :value="p.id">
+            <option v-for="p in participants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
@@ -37,7 +37,7 @@
           <label>Add participant:</label>
           <select v-model="selectedPlayer">
             <option disabled value="">Please select a User</option>
-            <option v-for="p in players" :key="p.id" :value="p.id">
+            <option v-for="p in potentialParticipants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
@@ -63,7 +63,7 @@
           <label>Create Bingo Board:</label>
           <select v-model="selectedPlayer">
             <option disabled value="">Please select a Player</option>
-            <option v-for="p in players" :key="p.id" :value="p.id">
+            <option v-for="p in participants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
@@ -73,7 +73,7 @@
           <label>Add participant:</label>
           <select v-model="selectedPlayer">
             <option disabled value="">Please select a User</option>
-            <option v-for="p in players" :key="p.id" :value="p.id">
+            <option v-for="p in potentialParticipants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, createBingoBoard, addParticipant } from '@/services/bingoService.js';
+  import { fetchBingoGames, createBingoGame, fetchBingoEvents, updateGameStatus, createBingoEvents, fetchUsers, fetchParticipants, createBingoBoard, addParticipant } from '@/services/bingoService.js';
 
   export default {
     name: 'AdminView',
@@ -100,6 +100,8 @@
         newGameError: '',
         players: [],
         selectedPlayer: '',
+        participants: new Map(),
+        potentialParticipants: new Map(),
       }
     },
     methods: {
@@ -119,11 +121,17 @@
               this.collapsedGames.set(game.gameid, true);
               const eventsResult = await fetchBingoEvents(game.gameid);
               this.events.set(game.gameid, eventsResult.data);
+              const participantsResult = await fetchParticipants(game.gameid);
+              this.participants.set(game.gameid, participantsResult.data);
+              this.potentialParticipants.set(game.gameid, this.players.filter(player => !this.participants.get(game.gameid).some(p => p.id === player.id)));
             } else if (game.status === 0) {
               this.upcomingGames.push(game);
               this.collapsedGames.set(game.gameid, true);
               const eventsResult = await fetchBingoEvents(game.gameid);
               this.events.set(game.gameid, eventsResult.data);
+              const participantsResult = await fetchParticipants(game.gameid);
+              this.participants.set(game.gameid, participantsResult.data);
+              this.potentialParticipants.set(game.gameid, this.players.filter(player => !this.participants.get(game.gameid).some(p => p.id === player.id)));
             }
           }
         } catch (err) {
@@ -269,8 +277,8 @@
       }
     },
     mounted() {
-      this.prepareAdminPage();
       this.loadPlayers();
+      this.prepareAdminPage();
     }
   }
 </script>
