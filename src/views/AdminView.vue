@@ -25,23 +25,23 @@
         <button type="submit" @click="stopGame(game.gameid)">Stop Game</button>
         <div>
           <label>Create Bingo Board:</label>
-          <select v-model="selectedPlayer">
+          <select v-model="selectedParticipant[game.gameid]">
             <option disabled value="">Please select a Player</option>
             <option v-for="p in participants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
-          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
+          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedParticipant[game.gameid] === ''">Upload Bingo Board</button>
         </div>
         <div>
           <label>Add participant:</label>
-          <select v-model="selectedPlayer">
+          <select v-model="selectedPotentialParticipant[game.gameid]">
             <option disabled value="">Please select a User</option>
             <option v-for="p in potentialParticipants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
-          <button type="submit" @click="addParticipant(game.gameid)" :disabled="this.selectedPlayer === ''">Add Participant</button>
+          <button type="submit" @click="addParticipant(game.gameid)" :disabled="this.selectedPotentialParticipant[game.gameid] === ''">Add Participant</button>
         </div>
       </div>
     </div>
@@ -61,23 +61,23 @@
         </div>
         <div>
           <label>Create Bingo Board:</label>
-          <select v-model="selectedPlayer">
+          <select v-model="selectedParticipant[game.gameid]">
             <option disabled value="">Please select a Player</option>
             <option v-for="p in participants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
-          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedPlayer === ''">Upload Bingo Board</button>
+          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedParticipant[game.gameid] === ''">Upload Bingo Board</button>
         </div>
         <div>
           <label>Add participant:</label>
-          <select v-model="selectedPlayer">
+          <select v-model="selectedPotentialParticipant[game.gameid]">
             <option disabled value="">Please select a User</option>
             <option v-for="p in potentialParticipants.get(game.gameid)" :key="p.id" :value="p.id">
               {{ p.username }}
             </option>
           </select>
-          <button type="submit" @click="addParticipant(game.gameid)" :disabled="this.selectedPlayer === ''">Add Participant</button>
+          <button type="submit" @click="addParticipant(game.gameid)" :disabled="this.selectedPotentialParticipant[game.gameid] === ''">Add Participant</button>
         </div>
       </div>
     </div>
@@ -99,7 +99,8 @@
         newGameName: '',
         newGameError: '',
         players: [],
-        selectedPlayer: '',
+        selectedParticipant: [],
+        selectedPotentialParticipant: [],
         participants: new Map(),
         potentialParticipants: new Map(),
       }
@@ -124,6 +125,8 @@
               const participantsResult = await fetchParticipants(game.gameid);
               this.participants.set(game.gameid, participantsResult.data);
               this.potentialParticipants.set(game.gameid, this.players.filter(player => !this.participants.get(game.gameid).some(p => p.id === player.id)));
+              this.selectedParticipant[game.gameid] = '';
+              this.selectedPotentialParticipant[game.gameid] = '';
             } else if (game.status === 0) {
               this.upcomingGames.push(game);
               this.collapsedGames.set(game.gameid, true);
@@ -132,6 +135,8 @@
               const participantsResult = await fetchParticipants(game.gameid);
               this.participants.set(game.gameid, participantsResult.data);
               this.potentialParticipants.set(game.gameid, this.players.filter(player => !this.participants.get(game.gameid).some(p => p.id === player.id)));
+              this.selectedParticipant[game.gameid] = '';
+              this.selectedPotentialParticipant[game.gameid] = '';
             }
           }
         } catch (err) {
@@ -233,14 +238,14 @@
       },
 
       async createBingoBoard(gameid) {
-        if (!this.selectedPlayer) {
+        if (!this.selectedParticipant[gameid]) {
           //TODO maybe show error to select player in the select box
           return;
         }
 
         try {
-          await createBingoBoard(gameid, this.selectedPlayer);
-          this.selectedPlayer = '';
+          await createBingoBoard(gameid, this.selectedParticipant[gameid]);
+          this.selectedParticipant[gameid] = '';
           await this.prepareAdminPage();
           await this.toggleCollapse(gameid);
         } catch (err) {
@@ -255,14 +260,14 @@
       },
 
       async addParticipant(gameid) {
-        if (!this.selectedPlayer) {
+        if (!this.selectedPotentialParticipant[gameid]) {
           //TODO maybe show error to select player in the select box
           return;
         }
 
         try {
-          await addParticipant(gameid, this.selectedPlayer);
-          this.selectedPlayer = '';
+          await addParticipant(gameid, this.selectedPotentialParticipant[gameid]);
+          this.selectedPotentialParticipant[gameid] = '';
           await this.prepareAdminPage();
           await this.toggleCollapse(gameid);
         } catch (err) {
