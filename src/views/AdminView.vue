@@ -31,7 +31,7 @@
               {{ p.username }}
             </option>
           </select>
-          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedParticipant[game.gameid] === ''">Upload Bingo Board</button>
+          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedParticipant[game.gameid] === ''">Create Bingo Board</button>
         </div>
         <div>
           <label>Add participant:</label>
@@ -67,7 +67,7 @@
               {{ p.username }}
             </option>
           </select>
-          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedParticipant[game.gameid] === ''">Upload Bingo Board</button>
+          <button type="submit" @click="createBingoBoard(game.gameid)" :disabled="this.selectedParticipant[game.gameid] === ''">Create Bingo Board</button>
         </div>
         <div>
           <label>Add participant:</label>
@@ -281,8 +281,8 @@
         }
       }
     },
-    mounted() {
-      this.loadPlayers();
+    async mounted() {
+      await this.loadPlayers();
       this.prepareAdminPage();
     }
   }
