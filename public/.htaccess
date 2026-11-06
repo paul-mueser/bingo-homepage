@@ -1,0 +1,31 @@
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Disable MultiViews
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+# API requests
+RewriteRule ^api/([a-zA-Z0-9_-]+)$ api/$1.php [L]
+
+# API requests must NOT be rewritten to index.html
+RewriteRule ^api(/.*)?$ - [L]
+
+# SPA Routing (Vue / React / Angular)
+RewriteBase /
+
+# Don't rewrite index.html
+RewriteRule ^index\.html$ - [L]
+
+# If the requested file or directory exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise, serve index.html
+RewriteRule . /index.html [L]
