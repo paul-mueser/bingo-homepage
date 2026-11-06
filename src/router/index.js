@@ -12,33 +12,34 @@ const routes = [
     name: 'Login',
     path: '/login',
     component: AuthenticationView,
-    beforeEnter: async (to, from, next) => {
+    beforeEnter: async (to, from) => {
       const userStore = useUserStore();
       try {
         await logout();
       } catch (e) {
       }
       userStore.clearUser();
-      next();
+      return true;
     }
   },
   {
+    name: 'Home',
     path: '/',
     component: HomeView,
-    beforeEnter: async (to, from, next) => {
+    beforeEnter: async (to, from) => {
       const userStore = useUserStore();
       try {
         const response = await verifyToken();
         userStore.setUser(response.data.data);
-        next();
+        return true;
       } catch (error) {
         try {
           const response = await refreshToken();
           userStore.setUser(response.data.data);
-          next();
+          return true;
         } catch (refreshError) {
           userStore.clearUser();
-          next('/login');
+          return { name: 'Login' };
         }
       }
     },
@@ -47,30 +48,30 @@ const routes = [
   { 
     path: '/admin',
     component: AdminView,
-    beforeEnter: async (to, from, next) => {
+    beforeEnter: async (to, from) => {
       const userStore = useUserStore();
       try {
         const response = await verifyToken();
         userStore.setUser(response.data.data);
         if (response.data.data.isAdmin) {
-          next();
+          return true;
         } else {
           window.alert('You must be an admin to access this area.');
-          next('/');
+          return { name: 'Home' };
         }
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
           userStore.setUser(refreshResponse.data.data);
           if (refreshResponse.data.data.isAdmin) {
-            next();
+            return true;
           } else {
             window.alert('You must be an admin to access this area.');
-            next('/');
+            return { name: 'Home' };
           }
         } catch (refreshError) {
           userStore.clearUser();
-          next('/login');
+          return { name: 'Login' };
         }
       }
     },
@@ -78,20 +79,20 @@ const routes = [
   {
     path: '/game/:gameId',
     component: ContentView,
-    beforeEnter: async (to, from, next) => {
+    beforeEnter: async (to, from) => {
       const userStore = useUserStore();
       try {
         const response = await verifyToken();
         userStore.setUser(response.data.data);
-        next();
+        return true;
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
           userStore.setUser(refreshResponse.data.data);
-          next();
+          return true;
         } catch (refreshError) {
           userStore.clearUser();
-          next('/login');
+          return { name: 'Login' };
         }
       }
     },
@@ -100,20 +101,20 @@ const routes = [
   {
     path: '/games/:gameStatus',
     component: GamesView,
-    beforeEnter: async (to, from, next) => {
+    beforeEnter: async (to, from) => {
       const userStore = useUserStore();
       try {
         const response = await verifyToken();
         userStore.setUser(response.data.data);
-        next();
+        return true;
       } catch (error) {
         try {
           const refreshResponse = await refreshToken();
           userStore.setUser(refreshResponse.data.data);
-          next();
+          return true;
         } catch (refreshError) {
           userStore.clearUser();
-          next('/login');
+          return { name: 'Login' };
         }
       }
     },
@@ -122,7 +123,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes
 })
 

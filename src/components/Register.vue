@@ -14,7 +14,7 @@
 <script setup>
   import { ref } from 'vue';
   import { useField, useForm } from 'vee-validate';
-  import { register } from '@/services/authService';
+  import { register } from '@/services/authService.js';
   import { useRouter } from 'vue-router';
 
   const passwordRef = ref(null);

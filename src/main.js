@@ -47,9 +47,11 @@ const vuetify = createVuetify({
                     'on-surface': 'rgb(255, 255, 255)',
                     'on-primary': 'rgb(255, 255, 255)',
                     'border-color': 'rgb(255, 255, 255)',
-                    'border-opacity': '0.12',
                     'shadow-color': 'rgb(0, 0, 0)',
+                },
+                variables: {
                     'high-emphasis-opacity': '1',
+                    'border-opacity': '0.12',
                 }
             }
         }

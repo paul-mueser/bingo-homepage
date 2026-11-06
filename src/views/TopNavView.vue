@@ -28,7 +28,7 @@ const drawer = ref(null);
 
 <script>
 import { logout } from '@/services/authService.js';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user.js';
 
 export default {
   name: 'TopNavView',

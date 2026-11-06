@@ -38,7 +38,7 @@ const value = ref('showBingoField');
   import BingoBoard from '@/components/BingoBoard.vue';
   import EventList from '@/components/EventList.vue';
   import Leaderboard from '@/components/Leaderboard.vue';
-  import { useUserStore } from '@/stores/user';
+  import { useUserStore } from '@/stores/user.js';
   import { fetchParticipants } from '@/services/bingoService.js';
 
   export default {

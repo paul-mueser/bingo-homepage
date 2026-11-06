@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import { fetchBingoGames, fetchBookmarkedGames, updateBookmark } from '@/services/bingoService';
+    import { fetchBingoGames, fetchBookmarkedGames, updateBookmark } from '@/services/bingoService.js';
 
     export default {
         name: 'GamesView',

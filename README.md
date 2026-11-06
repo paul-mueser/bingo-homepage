@@ -59,7 +59,7 @@ This will start the PHP server on port `8000` and the MySQL database on port `33
 Run the following command in the project root to start the Vue.js development server:
 
 ```
-npm run serve
+npm run dev
 ```
 
 ### Access the application

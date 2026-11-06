@@ -29,7 +29,7 @@
 		name: 'BingoBoard',
 		props: {
 			gameId: String,
-			userid: String
+			userid: Number
 		},
 		data() {
 			return {

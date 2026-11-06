@@ -10,7 +10,7 @@
 <script>
 import BookmarkedGames from '@/components/BookmarkedGames.vue';
 import EventSubmissionForm from '@/components/EventSubmissionForm.vue';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user.js';
 
 export default {
   name: 'HomeView',

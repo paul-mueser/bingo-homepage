@@ -12,7 +12,7 @@
 <script setup>
   import { ref } from 'vue';
   import { useField, useForm } from 'vee-validate';
-  import { login } from '@/services/authService';
+  import { login } from '@/services/authService.js';
   import { useRouter } from 'vue-router';
 
   const passwordRef = ref(null);
